@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System.Linq;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Neo4j.NDP.CSharpDriver.Serialization;
 
 namespace Neo4j.NDP.CSharpDriver.Test.Serialization
