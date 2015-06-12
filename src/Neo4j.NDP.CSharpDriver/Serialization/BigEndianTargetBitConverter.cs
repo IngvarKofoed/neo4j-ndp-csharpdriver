@@ -12,7 +12,7 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
         /// Converts the bytes to big endian.
         /// </summary>
         /// <param name="bytes">The bytes to convert.</param>
-        /// <returns>The bytes converted tobig endian.</returns>
+        /// <returns>The bytes converted to big endian.</returns>
         protected override byte[] ToTargetEndian(byte[] bytes)
         {
             if (BitConverter.IsLittleEndian)
