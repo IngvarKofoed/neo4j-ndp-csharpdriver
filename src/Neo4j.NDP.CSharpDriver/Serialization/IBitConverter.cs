@@ -42,6 +42,13 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
         byte[] GetBytes(uint value);
 
         /// <summary>
+        /// Converts an string to bytes.
+        /// </summary>
+        /// <param name="value">The string value to convert.</param>
+        /// <returns>The specified string value as an array of bytes.</returns>
+        byte[] GetBytes(string value);
+
+        /// <summary>
         /// Converts an byte array to a short.
         /// </summary>
         /// <param name="bytes">The byte array to convert.</param>

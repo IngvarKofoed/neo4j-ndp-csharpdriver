@@ -81,6 +81,24 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
         }
 
         [TestMethod]
+        public void ConvertingFromStringTest()
+        {
+            var converter = new BigEndianTargetBitConverter();
+
+            string value = "aBc-æøåÅøæ123";
+            byte[] expectedValue = { 0x61, 0x42, 0x63, 0x2D, 0xC3, 0xA6, 0xC3, 0xB8, 0xC3, 0xA5, 0xC3, 0x85, 0xC3, 0xB8, 0xC3, 0xA6, 0x31, 0x32, 0x33 };
+
+            byte[] result = converter.GetBytes(value);
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual(expectedValue.Length, result.Length);
+            for (int i = 0; i < expectedValue.Length; i++)
+            {
+                Assert.AreEqual(expectedValue[i], result[i]);
+            }
+        }
+        
+        [TestMethod]
         public void ConvertingToShortTest()
         {
             var converter = new BigEndianTargetBitConverter();

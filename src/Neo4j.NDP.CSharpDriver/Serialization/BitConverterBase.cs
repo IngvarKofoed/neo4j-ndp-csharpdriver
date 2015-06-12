@@ -72,6 +72,16 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
         }
 
         /// <summary>
+        /// Converts an string to bytes.
+        /// </summary>
+        /// <param name="value">The string value to convert.</param>
+        /// <returns>The specified string value as an array of bytes.</returns>
+        public byte[] GetBytes(string value)
+        {
+            return Encoding.UTF8.GetBytes(value);
+        }
+
+        /// <summary>
         /// Converts an byte array to a short.
         /// </summary>
         /// <param name="bytes">The byte array to convert.</param>
