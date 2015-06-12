@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Serialization\BigEndianTargetBitConverter.cs" />
     <Compile Include="Serialization\BitConverterBase.cs" />
     <Compile Include="Serialization\IBitConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

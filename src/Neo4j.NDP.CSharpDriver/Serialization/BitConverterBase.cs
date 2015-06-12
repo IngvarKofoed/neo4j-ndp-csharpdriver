@@ -10,7 +10,7 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
     /// Base class for <see cref="IBitConverter"/> that handles
     /// little vs big endian.
     /// </summary>
-    internal abstract class BitConverterBase : IBitConverter
+    public abstract class BitConverterBase : IBitConverter
     {
         /// <summary>
         /// Converts a byte to bytes.
@@ -100,7 +100,7 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
         /// <returns>A string converted from the byte array</returns>
         public string ToString(byte[] bytes)
         {
-            return Encoding.ASCII.GetString(bytes);
+            return Encoding.UTF8.GetString(bytes);
         }
 
         /// <summary>
