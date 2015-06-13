@@ -42,6 +42,7 @@
     <Compile Include="Connection.cs" />
     <Compile Include="Extensions\LoggingExtensions.cs" />
     <Compile Include="IConnection.cs" />
+    <Compile Include="Logging\ConsoleLogger.cs" />
     <Compile Include="Logging\IInternalLogger.cs" />
     <Compile Include="Logging\ILogger.cs" />
     <Compile Include="Neo4jService.cs" />
