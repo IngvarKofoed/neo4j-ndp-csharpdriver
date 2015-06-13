@@ -5,6 +5,9 @@ This is heavily base on: https://github.com/nigelsmall/ndp-howto
 
 This is very much a work in progress, so stay tuned!
 
+## Gettings started
+Read more on getting started here: https://github.com/nigelsmall/ndp-howto 
+
 ## Hello world
 ```C#
 Neo4jService neo4jService = new Neo4jService(new ConsoleLogger());
