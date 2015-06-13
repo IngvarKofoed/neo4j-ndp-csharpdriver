@@ -44,6 +44,7 @@
     <Compile Include="IConnection.cs" />
     <Compile Include="Logging\IInternalLogger.cs" />
     <Compile Include="Logging\ILogger.cs" />
+    <Compile Include="Neo4jService.cs" />
     <Compile Include="Serialization\BigEndianTargetBitConverter.cs" />
     <Compile Include="Serialization\BitConverterBase.cs" />
     <Compile Include="ChunkStream.cs" />
