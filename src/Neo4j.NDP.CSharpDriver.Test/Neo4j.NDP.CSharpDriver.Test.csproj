@@ -57,6 +57,7 @@
     <Compile Include="Serialization\LittleEndianTargetBitConverterTest.cs" />
     <Compile Include="Serialization\BigEndianTargetBitConverterTest.cs" />
     <Compile Include="Serialization\PackStreamBuilderTest.cs" />
+    <Compile Include="Serialization\MessageStructureExtensionsTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Neo4j.NDP.CSharpDriver\Neo4j.NDP.CSharpDriver.csproj">
