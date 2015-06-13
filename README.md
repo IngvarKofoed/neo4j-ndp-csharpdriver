@@ -16,9 +16,6 @@ using (IConnection connection = neo4jService.CreateConnection("localhost", 7687)
     connection.Run("CREATE (a:Person {name:'Alice'})-[ab:KNOWS]->(b:Person {name:'Bob'}) RETURN a, b");
     connection.Run("MATCH (a:Person) RETURN a.name AS name, a.age AS age");
 }
-
-Console.WriteLine("All done!");
-Console.ReadKey();
 ```
 #### Output from Hello World
 ```
