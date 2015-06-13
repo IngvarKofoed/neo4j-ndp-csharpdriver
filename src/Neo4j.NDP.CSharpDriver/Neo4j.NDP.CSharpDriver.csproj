@@ -39,8 +39,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\LoggingExtensions.cs" />
+    <Compile Include="Logging\IInternalLogger.cs" />
+    <Compile Include="Logging\ILogger.cs" />
     <Compile Include="Serialization\BigEndianTargetBitConverter.cs" />
     <Compile Include="Serialization\BitConverterBase.cs" />
+    <Compile Include="Serialization\ChunkStream.cs" />
     <Compile Include="Serialization\IBitConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Serialization\IMessageList.cs" />
@@ -61,8 +65,9 @@
     <Compile Include="Serialization\MessageStructure.cs" />
     <Compile Include="Serialization\MessageStructureExtensions.cs" />
     <Compile Include="Serialization\MessageText.cs" />
+    <Compile Include="Serialization\PackSteamBuilderFactory.cs" />
     <Compile Include="Serialization\PackStreamBuilder.cs" />
-    <Compile Include="Serialization\StreamExtensions.cs" />
+    <Compile Include="Extensions\StreamExtensions.cs" />
     <Compile Include="StructureSignature.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

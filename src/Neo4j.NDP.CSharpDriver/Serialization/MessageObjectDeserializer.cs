@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Neo4j.NDP.CSharpDriver.Extensions;
 
 namespace Neo4j.NDP.CSharpDriver.Serialization
 {
@@ -12,6 +13,20 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
     {
         // TODO: This should be injected
         private readonly IBitConverter bitConverter = new BigEndianTargetBitConverter();
+
+        /// <summary>
+        /// Deserializes one message object in case of list, map or structure, 
+        /// the children of thise message objects are also deserialized.
+        /// </summary>
+        /// <param name="data">An byte array to deserialize from.</param>
+        /// <returns>A deserialized <see cref="IMessageObject"/>.</returns>
+        public IMessageObject Deserialize(byte[] data)
+        {
+            using (MemoryStream stream = new MemoryStream(data))
+            {
+                return Deserialize(stream);
+            }
+        }
 
         /// <summary>
         /// Deserializes one message object in case of list, map or structure, 

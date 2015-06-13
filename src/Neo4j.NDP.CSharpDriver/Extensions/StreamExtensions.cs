@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace Neo4j.NDP.CSharpDriver.Serialization
+namespace Neo4j.NDP.CSharpDriver.Extensions
 {
     public static class StreamExtensions
     {
