@@ -48,10 +48,13 @@
     <Compile Include="Serialization\IMessageNull.cs" />
     <Compile Include="Serialization\IMessageObject.cs" />
     <Compile Include="Serialization\IMessageStructure.cs" />
+    <Compile Include="Serialization\IPackSteamBuilderFactory.cs" />
+    <Compile Include="Serialization\IPackStreamBuilder.cs" />
     <Compile Include="Serialization\LittleEndianTargetBitConverter.cs" />
     <Compile Include="Serialization\MessageList.cs" />
     <Compile Include="Serialization\MessageMap.cs" />
     <Compile Include="Serialization\MessageNull.cs" />
+    <Compile Include="Serialization\MessageObjectSerializer.cs" />
     <Compile Include="Serialization\MessageObjectType.cs" />
     <Compile Include="Serialization\IMessageText.cs" />
     <Compile Include="Serialization\MessageStructure.cs" />

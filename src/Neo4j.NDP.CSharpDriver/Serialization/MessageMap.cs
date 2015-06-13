@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace Neo4j.NDP.CSharpDriver.Serialization
@@ -23,6 +24,8 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
         /// <param name="map">The map of this map message objects.</param>
         public MessageMap(IDictionary<IMessageObject, IMessageObject> map)
         {
+            if (map == null) throw new ArgumentNullException("map");
+
             this.Map = (IReadOnlyDictionary<IMessageObject, IMessageObject>)map;
         }
 

@@ -10,6 +10,6 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
         Text = 1,
         Map = 2,
         List = 3,
-        Structure = 3
+        Structure = 4
     }
 }

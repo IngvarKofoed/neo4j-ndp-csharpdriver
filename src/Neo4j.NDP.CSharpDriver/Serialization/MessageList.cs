@@ -20,13 +20,22 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
         }
 
         /// <summary>
+        /// Instantiates a <see cref="MessageList"/> with the given item <see cref="item"/>.
+        /// </summary>
+        /// <param name="items">The item of the message list objects</param>
+        public MessageList(IMessageObject item)
+        {
+            if (item == null) throw new ArgumentNullException("item");
+            Items = new List<IMessageObject> { item };
+        }
+
+        /// <summary>
         /// Instantiates a <see cref="MessageList"/> with the given items <see cref="items"/>.
         /// </summary>
         /// <param name="items">The items of the message list objects</param>
         public MessageList(IEnumerable<IMessageObject> items)
         {
-            if (items == null)
-                throw new ArgumentNullException("items");
+            if (items == null) throw new ArgumentNullException("items");
             Items = items.ToList();
         }
 

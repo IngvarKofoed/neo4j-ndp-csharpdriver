@@ -8,7 +8,7 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
     /// This builds an byte array in the PackStream format.
     /// It is building it like the System.Text.StringBuilder.
     /// </summary>
-    public sealed class PackStreamBuilder
+    public sealed class PackStreamBuilder : IPackStreamBuilder
     {
         // Simple
         public static readonly byte NullMarker = 0xC0;

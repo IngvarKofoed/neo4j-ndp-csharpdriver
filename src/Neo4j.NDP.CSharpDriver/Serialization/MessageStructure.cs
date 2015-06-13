@@ -30,8 +30,7 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
         /// <param name="field">The field of this structure message objects.</param>
         public MessageStructure(StructureSignature signature, IMessageObject field)
         {
-            if (field == null)
-                throw new ArgumentNullException("field");
+            if (field == null) throw new ArgumentNullException("field");
 
             this.Signature = signature;
             this.Fields = new List<IMessageObject> { field };
@@ -45,8 +44,7 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
         /// <param name="field">The fields of this structure message objects.</param>
         public MessageStructure(StructureSignature signature, IEnumerable<IMessageObject> fields)
         {
-            if (fields == null)
-                throw new ArgumentNullException("fields");
+            if (fields == null) throw new ArgumentNullException("fields");
 
             this.Signature = signature;
             this.Fields = fields.ToList();
