@@ -46,6 +46,11 @@ namespace Neo4j.NDP.CSharpDriver
         /// </summary>
         Node = 0x4E,
 
+        /// <summary>
+        /// Structure containing a relationship.
+        /// </summary>
+        Relationship = 0x52,
+
         // TODO: Write this
         /// <summary>
         /// </summary>
