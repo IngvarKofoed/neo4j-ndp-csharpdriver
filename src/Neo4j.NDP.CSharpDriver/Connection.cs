@@ -34,7 +34,7 @@ namespace Neo4j.NDP.CSharpDriver
             logger.Info("Initialization was successful");
         }
 
-        public void Run(string statement)
+        public IGraph Run(string statement)
         {
             logger.Info("Running statement: {0}", statement);
             IMessageStructure runRequest = new MessageStructure(
@@ -63,20 +63,33 @@ namespace Neo4j.NDP.CSharpDriver
 
             logger.Info("Statement ran with success");
 
+            GraphBuilder graphBuilder = new GraphBuilder(); // TODO: Inject this or use factory
             while (true)
             {
                 IMessageObject result = chunkStream.Read();
                 logger.Info("Received message: {0}", result != null ? result.ToString() : "hmm");
 
-                if (result.IsSuccess()) break;
-                if (result.IsFailure())
+                if (result.IsStructureWithSignature(StructureSignature.Record))
+                {
+                    graphBuilder.AddRecord((IMessageStructure)result);
+                    continue;
+                }
+                if (result.IsStructureWithSignature(StructureSignature.Success)) 
+                {
+                    break;
+                }
+                else if (result.IsStructureWithSignature(StructureSignature.Failure))
                 {
                     // TODO: Ack failure
                     break;
                 }
+
+                throw new InvalidOperationException(string.Format("Unexpected response: {0}", result));
             }
 
             logger.Info("Finished with the run");
+
+            return graphBuilder.GetGraph();
         }
 
         public void Dispose()

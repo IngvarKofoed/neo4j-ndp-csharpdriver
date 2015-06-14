@@ -4,15 +4,15 @@ namespace Neo4j.NDP.CSharpDriver
 {
     public class Relationship : Entity, IRelationship
     {
-        public Relationship(long id, INode startNode, INode endNode) :
+        public Relationship(string id, string startNodeId, string endNodeId) :
             base(id)
         {
-            this.StartNode = startNode;
-            this.EndNode = endNode;
+            this.StartNodeId = startNodeId;
+            this.EndNodeId = endNodeId;
         }
 
-        public INode StartNode { get; private set; }
-        public INode EndNode { get; private set; }
+        public string StartNodeId { get; private set; }
+        public string EndNodeId { get; private set; }
     }
 }
 

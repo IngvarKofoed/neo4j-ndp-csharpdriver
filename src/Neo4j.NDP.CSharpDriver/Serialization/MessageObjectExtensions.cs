@@ -5,37 +5,24 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
     public static class MessageObjectExtensions
     {
         /// <summary>
-        /// Returns true if the given message object is a <see cref="IMessageStructure"/> and has
-        /// the signature <see cref="StructureSignature.Success"/>. 
+        /// Returns true if the given message object is of type <see cref="IMessageStructure"/> and has
+        /// the given signature <paramref name="signature"/>. 
         /// </summary>
-        /// <returns>True if is a message structure if success signature. Otherwice false.</returns>
+        /// <returns>
+        /// Returns true if the given message object is of type <see cref="IMessageStructure"/> and has
+        /// the given signature <paramref name="signature"/>. Otherwice false.
+        /// </returns>
         /// <param name="messageObject">Message object to check for success.</param>
+        /// <param name="signature">The expected signature of the message structure.</param>
         /// <exception cref="ArgumentNullException">if <paramref name="messageObject"/> is null.</exception>
-        public static bool IsSuccess(this IMessageObject messageObject)
+        public static bool IsStructureWithSignature(this IMessageObject messageObject, StructureSignature signature)
         {
             if (messageObject == null) throw new ArgumentNullException("messageObject");
 
             IMessageStructure messageStructure = messageObject as IMessageStructure;
             if (messageStructure == null) return false;
 
-            return messageStructure.Signature == StructureSignature.Success;
-        }
-
-        /// <summary>
-        /// Returns true if the given message object is a <see cref="IMessageStructure"/> and has
-        /// the signature <see cref="StructureSignature.Failure"/>. 
-        /// </summary>
-        /// <returns>True if is a message structure if failure signature. Otherwice false.</returns>
-        /// <param name="messageObject">Message object to check for failure.</param>
-        /// <exception cref="ArgumentNullException">if <paramref name="messageObject"/> is null.</exception>
-        public static bool IsFailure(this IMessageObject messageObject)
-        {
-            if (messageObject == null) throw new ArgumentNullException("messageObject");
-
-            IMessageStructure messageStructure = messageObject as IMessageStructure;
-            if (messageStructure == null) return false;
-
-            return messageStructure.Signature == StructureSignature.Failure;
+            return messageStructure.Signature == signature;
         }
     }
 }

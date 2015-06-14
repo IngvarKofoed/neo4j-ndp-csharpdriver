@@ -5,7 +5,7 @@ namespace Neo4j.NDP.CSharpDriver
 {
     public class Node : Entity, INode
     {
-        public Node(long id) :
+        public Node(string id) :
             base(id)
         {
         }
