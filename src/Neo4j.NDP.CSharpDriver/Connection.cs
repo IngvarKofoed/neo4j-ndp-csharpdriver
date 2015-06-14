@@ -65,11 +65,12 @@ namespace Neo4j.NDP.CSharpDriver
 
             logger.Info("Statement ran with success");
 
-            while (true)
+            IMessageObject result = chunkStream.Read();
+            while (result != null)
             {
-                IMessageObject result = chunkStream.Read();
-                if (result == null)
-                    break;
+                logger.Info("Received message: {0}", result.ToString());
+                
+                result = chunkStream.Read();
             }
         }
 
