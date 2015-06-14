@@ -38,10 +38,9 @@ namespace Neo4j.NDP.CSharpDriver
             byte[] chunkSizeData = new byte[2];
             stream.Read(chunkSizeData, 0, 2);
             short chunkSize = bitConverter.ToInt16(chunkSizeData);
-            logger.Debug("Received chunk header {0} ({1})", chunkSizeData.ToReadableString(), chunkSize);
+            if (chunkSize == 0) throw new InvalidOperationException("Unexpected chunk size of size zero received");
 
-            if (chunkSize == 0)
-                return null;
+            logger.Debug("Received chunk header {0} ({1})", chunkSizeData.ToReadableString(), chunkSize);
 
             byte[] chunkData = new byte[chunkSize];
             stream.Read(chunkData, 0, chunkSize);
@@ -50,18 +49,11 @@ namespace Neo4j.NDP.CSharpDriver
             IMessageObject message = deserializer.Deserialize(chunkData);
             logger.Debug("Received message {0}", message.ToString());
 
-            return message;
-        }
-
-        public void ReadEndOfMessage()
-        {
-            byte[] chunkSizeData = new byte[2];
             stream.Read(chunkSizeData, 0, 2);
-            short chunkSize = bitConverter.ToInt16(chunkSizeData);
-            logger.Debug("Received chunk header {0} ({1})", chunkSizeData.ToReadableString(), chunkSize);
+            chunkSize = bitConverter.ToInt16(chunkSizeData);
+            if (chunkSize != 0) throw new InvalidOperationException("Missing termination header");
 
-            if (chunkSize != 0)
-                throw new InvalidOperationException("Unexpected data received");
+            return message;
         }
 
         public void Write(IMessageObject messageObject)

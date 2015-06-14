@@ -61,17 +61,22 @@ namespace Neo4j.NDP.CSharpDriver
                 throw new InvalidOperationException("Run request failed with: " + runResponseStructure.ToString());
             }
 
-            chunkStream.ReadEndOfMessage();
-
             logger.Info("Statement ran with success");
 
-            IMessageObject result = chunkStream.Read();
-            while (result != null)
+            while (true)
             {
-                logger.Info("Received message: {0}", result.ToString());
-                
-                result = chunkStream.Read();
+                IMessageObject result = chunkStream.Read();
+                logger.Info("Received message: {0}", result != null ? result.ToString() : "hmm");
+
+                if (result.IsSuccess()) break;
+                if (result.IsFailure())
+                {
+                    // TODO: Ack failure
+                    break;
+                }
             }
+
+            logger.Info("Finished with the run");
         }
 
         public void Dispose()
@@ -95,8 +100,6 @@ namespace Neo4j.NDP.CSharpDriver
             IMessageStructure initResponse = chunkStream.Read() as IMessageStructure;
             if (initResponse == null) return false;
             if (initResponse.Signature != StructureSignature.Success) return false;
-
-            chunkStream.ReadEndOfMessage();
 
             return true;
         }
