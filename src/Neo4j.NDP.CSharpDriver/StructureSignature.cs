@@ -41,15 +41,15 @@ namespace Neo4j.NDP.CSharpDriver
         /// </summary>
         Record = 0x71,
 
+        /// <summary>
+        /// Structure containing a node.
+        /// </summary>
+        Node = 0x4E,
+
         // TODO: Write this
         /// <summary>
         /// </summary>
         Ignored = 0x72,
-
-        /// <summary>
-        /// Structure containing a node.
-        /// </summary>
-        Node = 0x78,
 
         /// <summary>
         /// Execution was a failure.
