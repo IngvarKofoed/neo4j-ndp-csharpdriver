@@ -2,7 +2,7 @@
 
 namespace Neo4j.NDP.CSharpDriver
 {
-    public class IEntity
+    public interface IEntity
     {
         /// <summary>
         /// The id of the entity (<see cref="INode"/>  or <see cref="IRelationship"/>)
