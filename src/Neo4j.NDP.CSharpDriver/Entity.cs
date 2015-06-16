@@ -2,12 +2,14 @@
 
 namespace Neo4j.NDP.CSharpDriver
 {
-    public class Entity
+    public abstract class Entity : IEntity
     {
         public Entity(string id)
         {
             this.Id = id;
         }
+
+        public abstract EntityType Type { get; }
 
         public string Id { get; private set; }
 

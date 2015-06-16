@@ -11,6 +11,8 @@ namespace Neo4j.NDP.CSharpDriver
             this.EndNodeId = endNodeId;
         }
 
+        public override EntityType Type { get { return EntityType.Relationship; } }
+
         public string StartNodeId { get; private set; }
         public string EndNodeId { get; private set; }
     }
