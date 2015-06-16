@@ -35,7 +35,10 @@ namespace Neo4j.NDP.CSharpDriver
 
         public IMessageObject Read()
         {
+            logger.Debug("Receiving header");
+
             byte[] chunkSizeData = new byte[2];
+
             stream.Read(chunkSizeData, 0, 2);
             short chunkSize = bitConverter.ToInt16(chunkSizeData);
             if (chunkSize == 0) throw new InvalidOperationException("Unexpected chunk size of size zero received");

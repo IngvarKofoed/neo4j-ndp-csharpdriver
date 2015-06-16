@@ -80,8 +80,6 @@
     <Compile Include="Relationship.cs" />
     <Compile Include="Node.cs" />
     <Compile Include="Serialization\MessageObjectExtensions.cs" />
-    <Compile Include="Graph.cs" />
-    <Compile Include="IGraph.cs" />
     <Compile Include="EntityType.cs" />
     <Compile Include="Serialization\EntityBuilder.cs" />
     <Compile Include="Serialization\IEntityBuilder.cs" />
