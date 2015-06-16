@@ -45,6 +45,13 @@ namespace Neo4j.NDP.CSharpDriver
                 }
 
             }
+
+            catch (SocketException ex) 
+            {
+                logger.Info("Shutting down and closing connection due to the error: {0}", ex.Message);
+                Cleanup(client, stream);
+                throw;
+            }
             catch (Exception ex) // TODO: Find possible connections
             {
                 logger.Info("Shutting down and closing connection due to the error: {0}", ex.Message);

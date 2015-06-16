@@ -4,16 +4,9 @@ using System.Collections.Generic;
 
 namespace Neo4j.NDP.CSharpDriver.Serialization
 {
-    public class GraphBuilder
+    public class EntityBuilder : IEntityBuilder
     {
-        private IList<INode> nodes = new List<INode>();
-        private IList<IRelationship> relationships = new List<IRelationship>();
-
-        public GraphBuilder()
-        {
-        }
-
-        public void AddRecord(IMessageStructure messageStructure)
+        public IEnumerable<IEntity> BuildFromRecord(IMessageStructure messageStructure)
         {
             IMessageList items = messageStructure.TryGetField<IMessageList>(0);
             if (items == null) throw new InvalidOperationException("Did not find the items of the Node");
@@ -25,28 +18,21 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
                 {
                     string id = fieldStructure.TryGetField<IMessageText>(0).Text;
                     INode node = new Node(id);
-                    nodes.Add(node);
+                    yield return node;
                 }
                 else if (field.IsStructureWithSignature(StructureSignature.Relationship))
                 {
                     string id = fieldStructure.TryGetField<IMessageText>(0).Text;
                     IRelationship relationship = new Relationship(id, "a", "b");
-                    relationships.Add(relationship);
+                    yield return relationship;
                 }
                 else 
                 {
                     throw new NotImplementedException();
                 }
             }
-        }
 
-
-        public IGraph GetGraph()
-        {
-            return new Graph(
-                nodes.Distinct(),
-                relationships.Distinct()
-            );
+            yield break;
         }
     }
 }

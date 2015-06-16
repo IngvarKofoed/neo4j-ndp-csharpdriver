@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Neo4j.NDP.CSharpDriver
 {
     // TODO: This interface is not finished yet!
     public interface IConnection : IDisposable
     {
-        IGraph Run(string statement);
+        IEnumerable<IEntity> Run(string statement);
     }
 }

@@ -2,6 +2,7 @@
 using Neo4j.NDP.CSharpDriver.Serialization;
 using System;
 using System.Net.Sockets;
+using System.Collections.Generic;
 
 
 namespace Neo4j.NDP.CSharpDriver
@@ -34,7 +35,7 @@ namespace Neo4j.NDP.CSharpDriver
             logger.Info("Initialization was successful");
         }
 
-        public IGraph Run(string statement)
+        public IEnumerable<IEntity> Run(string statement)
         {
             logger.Info("Running statement: {0}", statement);
             IMessageStructure runRequest = new MessageStructure(
@@ -63,7 +64,7 @@ namespace Neo4j.NDP.CSharpDriver
 
             logger.Info("Statement ran with success");
 
-            GraphBuilder graphBuilder = new GraphBuilder(); // TODO: Inject this or use factory
+            IEntityBuilder graphBuilder = new EntityBuilder(); // TODO: Inject this or use factory
             while (true)
             {
                 IMessageObject result = chunkStream.Read();
@@ -71,10 +72,13 @@ namespace Neo4j.NDP.CSharpDriver
 
                 if (result.IsStructureWithSignature(StructureSignature.Record))
                 {
-                    graphBuilder.AddRecord((IMessageStructure)result);
-                    continue;
+                    IEnumerable<IEntity> entities = graphBuilder.BuildFromRecord((IMessageStructure)result);
+                    foreach (IEntity entity in entities)
+                    {
+                        yield return entity;
+                    }
                 }
-                if (result.IsStructureWithSignature(StructureSignature.Success)) 
+                else if (result.IsStructureWithSignature(StructureSignature.Success)) 
                 {
                     break;
                 }
@@ -83,13 +87,15 @@ namespace Neo4j.NDP.CSharpDriver
                     // TODO: Ack failure
                     break;
                 }
-
-                throw new InvalidOperationException(string.Format("Unexpected response: {0}", result));
+                else 
+                {
+                    throw new InvalidOperationException(string.Format("Unexpected response: {0}", result));
+                }
             }
 
             logger.Info("Finished with the run");
-
-            return graphBuilder.GetGraph();
+           
+            yield break;
         }
 
         public void Dispose()

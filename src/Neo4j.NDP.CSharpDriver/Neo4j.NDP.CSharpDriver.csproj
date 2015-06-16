@@ -80,10 +80,11 @@
     <Compile Include="Relationship.cs" />
     <Compile Include="Node.cs" />
     <Compile Include="Serialization\MessageObjectExtensions.cs" />
-    <Compile Include="Serialization\GraphBuilder.cs" />
     <Compile Include="Graph.cs" />
     <Compile Include="IGraph.cs" />
     <Compile Include="EntityType.cs" />
+    <Compile Include="Serialization\EntityBuilder.cs" />
+    <Compile Include="Serialization\IEntityBuilder.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
