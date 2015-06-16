@@ -17,7 +17,12 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
                 if (field.IsStructureWithSignature(StructureSignature.Node))
                 {
                     string id = fieldStructure.TryGetField<IMessageText>(0).Text;
-                    INode node = new Node(id);
+                    IMessageList labelMessageList = fieldStructure.TryGetField<IMessageList>(1);
+                    IMessageMap propertiesMessageMap = fieldStructure.TryGetField<IMessageMap>(2);
+
+                    IEnumerable<string> labels = BuildLabels(labelMessageList);
+
+                    INode node = new Node(id, labels);
                     yield return node;
                 }
                 else if (field.IsStructureWithSignature(StructureSignature.Relationship))
@@ -36,6 +41,17 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
             }
 
             yield break;
+        }
+
+        private IEnumerable<string> BuildLabels(IMessageList labelMessageList)
+        {
+            foreach (IMessageObject itemObject in labelMessageList.Items)
+            {
+                if (itemObject.Type != MessageObjectType.Text) throw new InvalidOperationException("Unexpected type for node label: " + itemObject.Type);
+            
+                IMessageText labelObject = itemObject as IMessageText;
+                yield return labelObject.Text;
+            }
         }
     }
 }

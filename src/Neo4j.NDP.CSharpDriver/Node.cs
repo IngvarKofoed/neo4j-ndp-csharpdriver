@@ -1,13 +1,16 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 
 namespace Neo4j.NDP.CSharpDriver
 {
     public class Node : Entity, INode
     {
-        public Node(string id) :
+        public Node(string id, IEnumerable<string> labels) :
             base(id)
         {
+            if (labels == null) throw new ArgumentNullException("labels");
+            Labels = labels.ToList();
         }
 
         public override EntityType EntityType { get { return EntityType.Node; } }
