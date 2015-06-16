@@ -9,7 +9,7 @@ namespace Neo4j.NDP.CSharpDriver
             this.Id = id;
         }
 
-        public abstract EntityType Type { get; }
+        public abstract EntityType EntityType { get; }
 
         public string Id { get; private set; }
 

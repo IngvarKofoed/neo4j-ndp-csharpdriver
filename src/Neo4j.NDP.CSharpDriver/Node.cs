@@ -10,9 +10,14 @@ namespace Neo4j.NDP.CSharpDriver
         {
         }
 
-        public override EntityType Type { get { return EntityType.Node; } }
+        public override EntityType EntityType { get { return EntityType.Node; } }
 
         public IReadOnlyList<string> Labels { get; private set; }
+
+        public override string ToString()
+        {
+            return string.Format("{0}: {1}", EntityType, Id);
+        }
     }
 }
 

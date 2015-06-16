@@ -10,7 +10,7 @@ namespace Neo4j.NDP.CSharpDriver
         /// <summary>
         /// The type of the entity. <see cref="EntityType"/>.
         /// </summary>
-        EntityType Type { get; }
+        EntityType EntityType { get; }
         
         /// <summary>
         /// The id of the entity (<see cref="INode"/>  or <see cref="IRelationship"/>)

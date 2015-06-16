@@ -23,7 +23,10 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
                 else if (field.IsStructureWithSignature(StructureSignature.Relationship))
                 {
                     string id = fieldStructure.TryGetField<IMessageText>(0).Text;
-                    IRelationship relationship = new Relationship(id, "a", "b");
+                    string startNode = fieldStructure.TryGetField<IMessageText>(1).Text;
+                    string endNode = fieldStructure.TryGetField<IMessageText>(2).Text;
+                    string type = fieldStructure.TryGetField<IMessageText>(3).Text;
+                    IRelationship relationship = new Relationship(id, startNode, endNode, type);
                     yield return relationship;
                 }
                 else 
