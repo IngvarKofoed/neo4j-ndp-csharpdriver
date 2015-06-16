@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Neo4j.NDP.CSharpDriver
 {
@@ -17,6 +18,11 @@ namespace Neo4j.NDP.CSharpDriver
         /// </summary>
         /// <value>The identifier.</value>
         string Id { get; }
+
+        /// <summary>
+        /// Contains the properties of the entity.
+        /// </summary>
+        IReadOnlyDictionary<string, object> Properties { get; }
     }
 }
 

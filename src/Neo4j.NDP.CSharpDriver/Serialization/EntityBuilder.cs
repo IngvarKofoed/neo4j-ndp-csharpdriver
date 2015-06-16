@@ -20,9 +20,10 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
                     IMessageList labelMessageList = fieldStructure.TryGetField<IMessageList>(1);
                     IMessageMap propertiesMessageMap = fieldStructure.TryGetField<IMessageMap>(2);
 
-                    IEnumerable<string> labels = BuildLabels(labelMessageList);
+                    var labels = BuildLabels(labelMessageList);
+                    var properties = BuildProperties(propertiesMessageMap);
 
-                    INode node = new Node(id, labels);
+                    INode node = new Node(id, labels, properties);
                     yield return node;
                 }
                 else if (field.IsStructureWithSignature(StructureSignature.Relationship))
@@ -31,7 +32,11 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
                     string startNode = fieldStructure.TryGetField<IMessageText>(1).Text;
                     string endNode = fieldStructure.TryGetField<IMessageText>(2).Text;
                     string type = fieldStructure.TryGetField<IMessageText>(3).Text;
-                    IRelationship relationship = new Relationship(id, startNode, endNode, type);
+                    IMessageMap propertiesMessageMap = fieldStructure.TryGetField<IMessageMap>(4);
+
+                    var properties = BuildProperties(propertiesMessageMap);
+
+                    IRelationship relationship = new Relationship(id, startNode, endNode, type, properties);
                     yield return relationship;
                 }
                 else 
@@ -51,6 +56,41 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
             
                 IMessageText labelObject = itemObject as IMessageText;
                 yield return labelObject.Text;
+            }
+        }
+
+        private IEnumerable<Tuple<string, object>> BuildProperties(IMessageMap propertiesMessageMap)
+        {
+            foreach (var keyValue in propertiesMessageMap.Map)
+            {
+                string key = GetPropertyKey(keyValue.Key);
+                object value = GetPropertyValue(keyValue.Value);
+             
+                yield return new Tuple<string, object>(key, value);
+            }
+        }
+
+        private string GetPropertyKey(IMessageObject propertyValue)
+        {
+            if (propertyValue.Type == MessageObjectType.Text)
+            {
+                return ((MessageText)propertyValue).Text;
+            }
+            else 
+            {
+                throw new InvalidOperationException("Unexpected type for map key: " + propertyValue.Type);
+            }
+        }
+
+        private object GetPropertyValue(IMessageObject propertyValue)
+        {
+            if (propertyValue.Type == MessageObjectType.Text)
+            {
+                return ((MessageText)propertyValue).Text;
+            }
+            else 
+            {
+                throw new InvalidOperationException("Unexpected type for map value: " + propertyValue.Type);
             }
         }
     }

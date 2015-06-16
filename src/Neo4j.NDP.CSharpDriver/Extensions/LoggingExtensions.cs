@@ -39,5 +39,47 @@ namespace Neo4j.NDP.CSharpDriver.Extensions
 
             return sb.ToString();
         }
+
+        /// <summary>
+        /// Converts an enumerable of strings to a readable string.
+        /// </summary>
+        /// <returns>A string with all the strings.</returns>
+        /// <param name="values">The strings to convert.</param>
+        public static string ToReadableString(this IEnumerable<string> values)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("[");
+            bool isFirstLabel = true;
+            foreach (string value in values)
+            {
+                if (isFirstLabel) isFirstLabel = false;
+                else sb.Append(", ");
+                sb.Append(value);
+            }
+            sb.Append("]");
+            return sb.ToString();
+        }
+
+        /// <summary>
+        /// Converts a dictionary of string->object to a readable string.
+        /// </summary>
+        /// <returns>A string with all the string->object values.</returns>
+        /// <param name="values">The string->object values to convert.</param>
+        public static string ToReadableString(this IReadOnlyDictionary<string, object> values)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("{");
+            bool isFirstLabel = true;
+            foreach (var value in values)
+            {
+                if (isFirstLabel) isFirstLabel = false;
+                else sb.Append(", ");
+                sb.Append(value.Key);
+                sb.Append(":");
+                sb.Append(value.Value);
+            }
+            sb.Append("}");
+            return sb.ToString();
+        }
     }
 }

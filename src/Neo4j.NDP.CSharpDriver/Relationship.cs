@@ -1,11 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
+using Neo4j.NDP.CSharpDriver.Extensions;
 
 namespace Neo4j.NDP.CSharpDriver
 {
     public class Relationship : Entity, IRelationship
     {
-        public Relationship(string id, string startNodeId, string endNodeId, string type) :
-            base(id)
+        public Relationship(string id, string startNodeId, string endNodeId, string type, IEnumerable<Tuple<string, object>> properties = null) :
+        base(id, properties)
         {
             this.StartNodeId = startNodeId;
             this.EndNodeId = endNodeId;
@@ -20,7 +22,7 @@ namespace Neo4j.NDP.CSharpDriver
 
         public override string ToString()
         {
-            return string.Format("{0}: {1}, {2}-{3}->{4}", EntityType, Id, StartNodeId, Type, EndNodeId);
+            return string.Format("{0}: {1}, {2}-{3}->{4} {5}", EntityType, Id, StartNodeId, Type, EndNodeId, Properties.ToReadableString());
         }
     }
 }
