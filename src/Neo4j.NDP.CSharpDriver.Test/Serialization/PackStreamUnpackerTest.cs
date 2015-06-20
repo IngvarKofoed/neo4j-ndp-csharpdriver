@@ -230,6 +230,7 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
             Assert.AreEqual(10, result);
         }
 
+        [TestMethod]
         public void Int64ResultTest()
         {
             // Initialize
@@ -242,8 +243,8 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
 
             // Validate
             ValidateHasIntValues(result);
-            Assert.AreEqual(PackStreamType.Integer32, result.Type);
-            Assert.AreEqual(4, result.IntValue.Value);
+            Assert.AreEqual(PackStreamType.Integer64, result.Type);
+            Assert.AreEqual(8, result.IntValue.Value);
         }
 
         [TestMethod]
@@ -303,6 +304,24 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
             byte[] streamBytes = new byte[] { 0xD1, 0x01, 0x02 };
             Mock<IBitConverter> bitConverter = new Mock<IBitConverter>();
             bitConverter.Setup(f => f.ToInt16(It.Is<byte[]>(g => ArraysEqual(g, streamBytes.Skip(1).ToArray())))).Returns(300);
+            IPackStreamUnpacker unpacker = new PackStreamUnpacker(bitConverter.Object);
+
+            // Run
+            PackStreamUnpackerResult result = GetResult(s => unpacker.ReadNextType(s), streamBytes);
+
+            // Validate
+            ValidateHasIntValues(result);
+            Assert.AreEqual(PackStreamType.Text, result.Type);
+            Assert.AreEqual(300, result.IntValue);
+        }
+
+        [TestMethod]
+        public void Text32ResultTest()
+        {
+            // Initialize
+            byte[] streamBytes = new byte[] { 0xD2, 0x01, 0x02, 0x03, 0x04 };
+            Mock<IBitConverter> bitConverter = new Mock<IBitConverter>();
+            bitConverter.Setup(f => f.ToInt32(It.Is<byte[]>(g => ArraysEqual(g, streamBytes.Skip(1).ToArray())))).Returns(300);
             IPackStreamUnpacker unpacker = new PackStreamUnpacker(bitConverter.Object);
 
             // Run
@@ -435,6 +454,77 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
             Assert.AreEqual(PackStreamType.Map, result.Type);
             Assert.AreEqual(300, result.IntValue);
         }
+
+
+
+
+        [TestMethod]
+        public void Structure4ResultTest()
+        {
+            // Initialize
+            byte[] streamBytes = new byte[] { 0xB2 };
+            Mock<IBitConverter> bitConverter = new Mock<IBitConverter>();
+            IPackStreamUnpacker unpacker = new PackStreamUnpacker(bitConverter.Object);
+
+            // Run
+            PackStreamUnpackerResult result = GetResult(s => unpacker.ReadNextType(s), streamBytes);
+
+            // Validate
+            ValidateHasIntValues(result);
+            Assert.AreEqual(PackStreamType.Structure, result.Type);
+            Assert.AreEqual(2, result.IntValue);
+        }
+
+        [TestMethod]
+        public void Structure8ResultTest()
+        {
+            // Initialize
+            byte[] streamBytes = new byte[] { 0xDC, 0x10 };
+            Mock<IBitConverter> bitConverter = new Mock<IBitConverter>();
+            IPackStreamUnpacker unpacker = new PackStreamUnpacker(bitConverter.Object);
+
+            // Run
+            PackStreamUnpackerResult result = GetResult(s => unpacker.ReadNextType(s), streamBytes);
+
+            // Validate
+            ValidateHasIntValues(result);
+            Assert.AreEqual(PackStreamType.Structure, result.Type);
+            Assert.AreEqual(16, result.IntValue);
+        }
+
+        [TestMethod]
+        public void Structure16ResultTest()
+        {
+            // Initialize
+            byte[] streamBytes = new byte[] { 0xDD, 0x01, 0x02 };
+            Mock<IBitConverter> bitConverter = new Mock<IBitConverter>();
+            bitConverter.Setup(f => f.ToInt16(It.Is<byte[]>(g => ArraysEqual(g, streamBytes.Skip(1).ToArray())))).Returns(300);
+            IPackStreamUnpacker unpacker = new PackStreamUnpacker(bitConverter.Object);
+
+            // Run
+            PackStreamUnpackerResult result = GetResult(s => unpacker.ReadNextType(s), streamBytes);
+
+            // Validate
+            ValidateHasIntValues(result);
+            Assert.AreEqual(PackStreamType.Structure, result.Type);
+            Assert.AreEqual(300, result.IntValue);
+        }
+
+        [TestMethod]
+        public void ReadStructureSignatureTest()
+        {
+            // Initialize
+            byte[] streamBytes = new byte[] { 0x01 };
+            Mock<IBitConverter> bitConverter = new Mock<IBitConverter>();
+            IPackStreamUnpacker unpacker = new PackStreamUnpacker(bitConverter.Object);
+
+            // Run
+            StructureSignature result = GetResult(s => unpacker.ReadStructureSignature(s), streamBytes);
+
+            // Validate
+            Assert.AreEqual(StructureSignature.Init, result);
+        }
+
 
         [TestMethod]
         public void Map32ResultTest()

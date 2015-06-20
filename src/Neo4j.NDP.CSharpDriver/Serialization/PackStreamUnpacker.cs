@@ -140,6 +140,18 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
                 int fieldCount = (int)marker_low;
                 return new PackStreamUnpackerResult(PackStreamType.Structure, fieldCount);
             }
+            else if (marker == PackStreamPacker.Structure8Marker)
+            {
+                int length = stream.ReadByte();
+                return new PackStreamUnpackerResult(PackStreamType.Structure, length);
+            }
+            else if (marker == PackStreamPacker.Structure16Marker)
+            {
+                byte[] lengthBytes = new byte[2];
+                stream.Read(lengthBytes);
+                int length = bitConverter.ToInt16(lengthBytes);
+                return new PackStreamUnpackerResult(PackStreamType.Structure, length);
+            }
             else
             {
                 throw new InvalidOperationException(string.Format("Marker not supported: {0:X2}", marker));
