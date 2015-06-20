@@ -263,7 +263,7 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
         }
 
         [TestMethod]
-        public void Text4BitResultTest()
+        public void Text4ResultTest()
         {
             // Initialize
             byte[] streamBytes = new byte[] { 0x82 };
@@ -280,7 +280,7 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
         }
 
         [TestMethod]
-        public void Text8BitResultTest()
+        public void Text8ResultTest()
         {
             // Initialize
             byte[] streamBytes = new byte[] { 0xD0, 0x10 };
@@ -297,7 +297,7 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
         }
 
         [TestMethod]
-        public void Text16BitResultTest()
+        public void Text16ResultTest()
         {
             // Initialize
             byte[] streamBytes = new byte[] { 0xD1, 0x01, 0x02 };
@@ -315,7 +315,7 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
         }
 
         [TestMethod]
-        public void Text32BitResultTest()
+        public void Text32ResultTest()
         {
             // Initialize
             byte[] streamBytes = new byte[] { 0xD2, 0x01, 0x02, 0x03, 0x04 };
