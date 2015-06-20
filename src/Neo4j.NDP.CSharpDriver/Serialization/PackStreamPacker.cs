@@ -20,24 +20,24 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
         // Integer
         // TODO: Add markers for integers
         // Text
-        public static readonly byte Text4BitMarker = 0x80;
-        public static readonly byte Text8BitMarker = 0xD0;
-        public static readonly byte Text16BitMarker = 0xD1;
-        public static readonly byte Text32BitMarker = 0xD2;
+        public static readonly byte Text4Marker = 0x80;
+        public static readonly byte Text8Marker = 0xD0;
+        public static readonly byte Text16Marker = 0xD1;
+        public static readonly byte Text32Marker = 0xD2;
         // List
-        public static readonly byte List4BitMarker = 0x90;
-        public static readonly byte List8BitMarker = 0xD4;
-        public static readonly byte List16BitMarker = 0xD5;
-        public static readonly byte List32BitMarker = 0xD6;
+        public static readonly byte List4Marker = 0x90;
+        public static readonly byte List8Marker = 0xD4;
+        public static readonly byte List16Marker = 0xD5;
+        public static readonly byte List32Marker = 0xD6;
         // Map
-        public static readonly byte Map4BitMarker = 0xA0;
-        public static readonly byte Map8BitMarker = 0xD8;
-        public static readonly byte Map16BitMarker = 0xD9;
-        public static readonly byte Map32BitMarker = 0xDA;
+        public static readonly byte Map4Marker = 0xA0;
+        public static readonly byte Map8Marker = 0xD8;
+        public static readonly byte Map16Marker = 0xD9;
+        public static readonly byte Map32Marker = 0xDA;
         // Structure
-        public static readonly byte Structure4BitMarker = 0xB0;
-        public static readonly byte Structure8BitMarker = 0xDC;
-        public static readonly byte Structure16BitMarker = 0xDD;
+        public static readonly byte Structure4Marker = 0xB0;
+        public static readonly byte Structure8Marker = 0xDC;
+        public static readonly byte Structure16Marker = 0xDD;
 
         private readonly IBitConverter bitConverter;
         
@@ -63,24 +63,24 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
 
             if (textBytes.Length <= 15)
             {
-                byte marker = (byte)(Text4BitMarker + textBytes.Length);
+                byte marker = (byte)(Text4Marker + textBytes.Length);
                 bytes.Add(marker);
             }
             else if (textBytes.Length <= 255)
             {
-                bytes.Add(Text8BitMarker);
+                bytes.Add(Text8Marker);
                 byte size = (byte)textBytes.Length;
                 bytes.Add(size);
             }
             else if (textBytes.Length <= 65535)
             {
-                bytes.Add(Text16BitMarker);
+                bytes.Add(Text16Marker);
                 ushort size = (ushort)textBytes.Length;
                 bytes.AddRange(bitConverter.GetBytes(size));
             }
             else if (textBytes.Length <= int.MaxValue) // Shoudl be 4294967295, but List<>.Count is returning int, not uint
             {
-                bytes.Add(Text32BitMarker);
+                bytes.Add(Text32Marker);
                 int size = textBytes.Length;
                 bytes.AddRange(bitConverter.GetBytes(size));
             }
@@ -97,22 +97,22 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
         {
             if (listElementCount < 16)
             {
-                byte marker = (byte)(List4BitMarker + listElementCount);
+                byte marker = (byte)(List4Marker + listElementCount);
                 bytes.Add(marker);
             }
             else if (listElementCount < 256)
             {
-                bytes.Add(List8BitMarker);
+                bytes.Add(List8Marker);
                 bytes.AddRange(bitConverter.GetBytes((byte)listElementCount));
             }
             else if (listElementCount < 65536)
             {
-                bytes.Add(List16BitMarker);
+                bytes.Add(List16Marker);
                 bytes.AddRange(bitConverter.GetBytes((short)listElementCount));
             }
             else if (listElementCount < int.MaxValue) // Shoudl be 4294967295, but List<>.Count is returning int, not uint
             {
-                bytes.Add(List32BitMarker);
+                bytes.Add(List32Marker);
                 bytes.AddRange(bitConverter.GetBytes(listElementCount));
             }
         }
@@ -126,22 +126,22 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
         {
             if (mapElementCount < 16)
             {
-                byte marker = (byte)(Map4BitMarker + mapElementCount);
+                byte marker = (byte)(Map4Marker + mapElementCount);
                 bytes.Add(marker);
             }
             else if (mapElementCount < 256)
             {
-                bytes.Add(Map8BitMarker);
+                bytes.Add(Map8Marker);
                 bytes.AddRange(bitConverter.GetBytes((byte)mapElementCount));
             }
             else if (mapElementCount < 65536)
             {
-                bytes.Add(Map16BitMarker);
+                bytes.Add(Map16Marker);
                 bytes.AddRange(bitConverter.GetBytes((short)mapElementCount));
             }
             else if (mapElementCount < int.MaxValue) // Shoudl be 4294967295, but Dictionary<,>.Count is returning int, not uint
             {
-                bytes.Add(Map32BitMarker);
+                bytes.Add(Map32Marker);
                 bytes.AddRange(bitConverter.GetBytes(mapElementCount));
             }
         }
@@ -156,19 +156,19 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
         {
             if (fieldInStructureCount < 16)
             {
-                byte marker = (byte)(Structure4BitMarker + fieldInStructureCount);
+                byte marker = (byte)(Structure4Marker + fieldInStructureCount);
                 bytes.Add(marker);
                 bytes.Add((byte)signature);
             }
             else if (fieldInStructureCount < 256)
             {
-                bytes.Add(Structure8BitMarker);
+                bytes.Add(Structure8Marker);
                 bytes.AddRange(bitConverter.GetBytes((byte)fieldInStructureCount));
                 bytes.Add((byte)signature);
             }
             else if (fieldInStructureCount < 65536)
             {
-                bytes.Add(Structure16BitMarker);
+                bytes.Add(Structure16Marker);
                 bytes.AddRange(bitConverter.GetBytes((short)fieldInStructureCount));
                 bytes.Add((byte)signature);
             }
