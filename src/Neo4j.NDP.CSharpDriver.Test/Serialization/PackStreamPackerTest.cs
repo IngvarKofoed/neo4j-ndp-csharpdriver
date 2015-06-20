@@ -5,7 +5,7 @@ using Neo4j.NDP.CSharpDriver.Serialization;
 namespace Neo4j.NDP.CSharpDriver.Test.Serialization
 {
     [TestClass]
-    public class PackStreamBuilderTest
+    public class PackStreamPackerTest
     {
         [TestMethod]
         public void Text4BitTest()
@@ -15,11 +15,11 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
 
             Mock<IBitConverter> bitConverter = new Mock<IBitConverter>();
             bitConverter.Setup(f => f.GetBytes(testString)).Returns(new byte[] { 1, 2, 3 });
-            PackStreamBuilder builder = new PackStreamBuilder(bitConverter.Object);
+            PackStreamPacker packer = new PackStreamPacker(bitConverter.Object);
 
             // Run
-            builder.Append(testString);
-            byte[] result = builder.GetBytes();
+            packer.Append(testString);
+            byte[] result = packer.GetBytes();
 
             // Validate
             Assert.IsNotNull(result);
@@ -45,11 +45,11 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
             Mock<IBitConverter> bitConverter = new Mock<IBitConverter>();
             bitConverter.Setup(f => f.GetBytes(testString)).Returns(serializedBytes);
             bitConverter.Setup(f => f.GetBytes((byte)length)).Returns(new byte[] { (byte)length });
-            PackStreamBuilder builder = new PackStreamBuilder(bitConverter.Object);
+            PackStreamPacker packer = new PackStreamPacker(bitConverter.Object);
 
             // Run
-            builder.Append(testString);
-            byte[] result = builder.GetBytes();
+            packer.Append(testString);
+            byte[] result = packer.GetBytes();
 
             // Validate
             Assert.IsNotNull(result);
@@ -77,11 +77,11 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
             Mock<IBitConverter> bitConverter = new Mock<IBitConverter>();
             bitConverter.Setup(f => f.GetBytes(testString)).Returns(serializedBytes);
             bitConverter.Setup(f => f.GetBytes((ushort)length)).Returns(new byte[] { 123 });
-            PackStreamBuilder builder = new PackStreamBuilder(bitConverter.Object);
+            PackStreamPacker packer = new PackStreamPacker(bitConverter.Object);
 
             // Run
-            builder.Append(testString);
-            byte[] result = builder.GetBytes();
+            packer.Append(testString);
+            byte[] result = packer.GetBytes();
 
             // Validate
             Assert.IsNotNull(result);
@@ -109,11 +109,11 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
             Mock<IBitConverter> bitConverter = new Mock<IBitConverter>();
             bitConverter.Setup(f => f.GetBytes(testString)).Returns(serializedBytes);
             bitConverter.Setup(f => f.GetBytes((int)length)).Returns(new byte[] { 123 });
-            PackStreamBuilder builder = new PackStreamBuilder(bitConverter.Object);
+            PackStreamPacker packer = new PackStreamPacker(bitConverter.Object);
 
             // Run
-            builder.Append(testString);
-            byte[] result = builder.GetBytes();
+            packer.Append(testString);
+            byte[] result = packer.GetBytes();
 
             // Validate
             Assert.IsNotNull(result);
@@ -131,11 +131,11 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
         {
             // Initialize
             Mock<IBitConverter> bitConverter = new Mock<IBitConverter>();
-            PackStreamBuilder builder = new PackStreamBuilder(bitConverter.Object);
+            PackStreamPacker packer = new PackStreamPacker(bitConverter.Object);
 
             // Run
-            builder.AppendListHeader(1);
-            byte[] result = builder.GetBytes();
+            packer.AppendListHeader(1);
+            byte[] result = packer.GetBytes();
 
             // Validate
             Assert.IsNotNull(result);
@@ -149,12 +149,12 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
             // Initialize
             int length = 100;
             Mock<IBitConverter> bitConverter = new Mock<IBitConverter>();
-            PackStreamBuilder builder = new PackStreamBuilder(bitConverter.Object);
+            PackStreamPacker packer = new PackStreamPacker(bitConverter.Object);
             bitConverter.Setup(f => f.GetBytes((byte)length)).Returns(new byte[] { 0xAB });
 
             // Run
-            builder.AppendListHeader(length);
-            byte[] result = builder.GetBytes();
+            packer.AppendListHeader(length);
+            byte[] result = packer.GetBytes();
 
             // Validate
             Assert.IsNotNull(result);
@@ -169,12 +169,12 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
             // Initialize
             int length = 300;
             Mock<IBitConverter> bitConverter = new Mock<IBitConverter>();
-            PackStreamBuilder builder = new PackStreamBuilder(bitConverter.Object);
+            PackStreamPacker packer = new PackStreamPacker(bitConverter.Object);
             bitConverter.Setup(f => f.GetBytes((short)length)).Returns(new byte[] { 0xAB });
 
             // Run
-            builder.AppendListHeader(length);
-            byte[] result = builder.GetBytes();
+            packer.AppendListHeader(length);
+            byte[] result = packer.GetBytes();
 
             // Validate
             Assert.IsNotNull(result);
@@ -189,12 +189,12 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
             // Initialize
             int length = 70000;
             Mock<IBitConverter> bitConverter = new Mock<IBitConverter>();
-            PackStreamBuilder builder = new PackStreamBuilder(bitConverter.Object);
+            PackStreamPacker packer = new PackStreamPacker(bitConverter.Object);
             bitConverter.Setup(f => f.GetBytes((int)length)).Returns(new byte[] { 0xAB });
 
             // Run
-            builder.AppendListHeader(length);
-            byte[] result = builder.GetBytes();
+            packer.AppendListHeader(length);
+            byte[] result = packer.GetBytes();
 
             // Validate
             Assert.IsNotNull(result);
@@ -208,11 +208,11 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
         {
             // Initialize
             Mock<IBitConverter> bitConverter = new Mock<IBitConverter>();
-            PackStreamBuilder builder = new PackStreamBuilder(bitConverter.Object);
+            PackStreamPacker packer = new PackStreamPacker(bitConverter.Object);
 
             // Run
-            builder.AppendMapHeader(1);
-            byte[] result = builder.GetBytes();
+            packer.AppendMapHeader(1);
+            byte[] result = packer.GetBytes();
 
             // Validate
             Assert.IsNotNull(result);
@@ -226,12 +226,12 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
             // Initialize
             int length = 100;
             Mock<IBitConverter> bitConverter = new Mock<IBitConverter>();
-            PackStreamBuilder builder = new PackStreamBuilder(bitConverter.Object);
+            PackStreamPacker packer = new PackStreamPacker(bitConverter.Object);
             bitConverter.Setup(f => f.GetBytes((byte)length)).Returns(new byte[] { 0xAB });
 
             // Run
-            builder.AppendMapHeader(length);
-            byte[] result = builder.GetBytes();
+            packer.AppendMapHeader(length);
+            byte[] result = packer.GetBytes();
 
             // Validate
             Assert.IsNotNull(result);
@@ -246,12 +246,12 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
             // Initialize
             int length = 300;
             Mock<IBitConverter> bitConverter = new Mock<IBitConverter>();
-            PackStreamBuilder builder = new PackStreamBuilder(bitConverter.Object);
+            PackStreamPacker packer = new PackStreamPacker(bitConverter.Object);
             bitConverter.Setup(f => f.GetBytes((short)length)).Returns(new byte[] { 0xAB });
 
             // Run
-            builder.AppendMapHeader(length);
-            byte[] result = builder.GetBytes();
+            packer.AppendMapHeader(length);
+            byte[] result = packer.GetBytes();
 
             // Validate
             Assert.IsNotNull(result);
@@ -266,12 +266,12 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
             // Initialize
             int length = 70000;
             Mock<IBitConverter> bitConverter = new Mock<IBitConverter>();
-            PackStreamBuilder builder = new PackStreamBuilder(bitConverter.Object);
+            PackStreamPacker packer = new PackStreamPacker(bitConverter.Object);
             bitConverter.Setup(f => f.GetBytes((int)length)).Returns(new byte[] { 0xAB });
 
             // Run
-            builder.AppendMapHeader(length);
-            byte[] result = builder.GetBytes();
+            packer.AppendMapHeader(length);
+            byte[] result = packer.GetBytes();
 
             // Validate
             Assert.IsNotNull(result);
@@ -287,11 +287,11 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
         {
             // Initialize
             Mock<IBitConverter> bitConverter = new Mock<IBitConverter>();
-            PackStreamBuilder builder = new PackStreamBuilder(bitConverter.Object);
+            PackStreamPacker packer = new PackStreamPacker(bitConverter.Object);
 
             // Run
-            builder.AppendStructureHeader(StructureSignature.Init, 1);
-            byte[] result = builder.GetBytes();
+            packer.AppendStructureHeader(StructureSignature.Init, 1);
+            byte[] result = packer.GetBytes();
 
             // Validate
             Assert.IsNotNull(result);
@@ -307,12 +307,12 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
             // Initialize
             int length = 100;
             Mock<IBitConverter> bitConverter = new Mock<IBitConverter>();
-            PackStreamBuilder builder = new PackStreamBuilder(bitConverter.Object);
+            PackStreamPacker packer = new PackStreamPacker(bitConverter.Object);
             bitConverter.Setup(f => f.GetBytes((byte)length)).Returns(new byte[] { 0xAB });
 
             // Run
-            builder.AppendStructureHeader(StructureSignature.Init, length);
-            byte[] result = builder.GetBytes();
+            packer.AppendStructureHeader(StructureSignature.Init, length);
+            byte[] result = packer.GetBytes();
 
             // Validate
             Assert.IsNotNull(result);
@@ -328,12 +328,12 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
             // Initialize
             int length = 300;
             Mock<IBitConverter> bitConverter = new Mock<IBitConverter>();
-            PackStreamBuilder builder = new PackStreamBuilder(bitConverter.Object);
+            PackStreamPacker packer = new PackStreamPacker(bitConverter.Object);
             bitConverter.Setup(f => f.GetBytes((short)length)).Returns(new byte[] { 0xAB });
 
             // Run
-            builder.AppendStructureHeader(StructureSignature.Init, length);
-            byte[] result = builder.GetBytes();
+            packer.AppendStructureHeader(StructureSignature.Init, length);
+            byte[] result = packer.GetBytes();
 
             // Validate
             Assert.IsNotNull(result);
@@ -349,12 +349,12 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
             // Initialize
             int length = 70000;
             Mock<IBitConverter> bitConverter = new Mock<IBitConverter>();
-            PackStreamBuilder builder = new PackStreamBuilder(bitConverter.Object);
+            PackStreamPacker packer = new PackStreamPacker(bitConverter.Object);
             bitConverter.Setup(f => f.GetBytes((int)length)).Returns(new byte[] { 0xAB });
 
             // Run
-            builder.AppendMapHeader(length);
-            byte[] result = builder.GetBytes();
+            packer.AppendMapHeader(length);
+            byte[] result = packer.GetBytes();
 
             // Validate
             Assert.IsNotNull(result);

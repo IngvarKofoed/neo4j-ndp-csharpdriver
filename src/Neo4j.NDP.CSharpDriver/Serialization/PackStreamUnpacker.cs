@@ -9,10 +9,15 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
     {
         private readonly IBitConverter bitConverter;
 
+        /// <summary>
+        /// Instantiates an <see cref="PackStreamUnpacker"/> instance.
+        /// </summary>
+        /// <param name="bitConverter">The <see cref="IBitConverter"/> to use when converting bytes from the pack stream.</param>
         public PackStreamUnpacker(IBitConverter bitConverter)
         {
-            this.bitConverter = bitConverter;
+            if (bitConverter == null) throw new ArgumentNullException("bitConverter");
 
+            this.bitConverter = bitConverter;
         }
 
         public PackStreamUnpackerResult ReadNextType(Stream stream)
