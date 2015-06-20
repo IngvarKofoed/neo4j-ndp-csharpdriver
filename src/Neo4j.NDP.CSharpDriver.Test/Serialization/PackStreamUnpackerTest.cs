@@ -34,6 +34,18 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
         }
 
         [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void ReadNextTypeNullTest()
+        {
+            // Initialize
+            Mock<IBitConverter> bitConverter = new Mock<IBitConverter>();
+            IPackStreamUnpacker unpacker = new PackStreamUnpacker(bitConverter.Object);
+
+            // Run
+            unpacker.ReadNextType(null);
+        }
+
+        [TestMethod]
         public void NullResultTest()
         {
             // Initialize
@@ -135,6 +147,18 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
         }
 
         [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void ReadInt8NullTest()
+        {
+            // Initialize
+            Mock<IBitConverter> bitConverter = new Mock<IBitConverter>();
+            IPackStreamUnpacker unpacker = new PackStreamUnpacker(bitConverter.Object);
+
+            // Run
+            unpacker.ReadInt8(null);
+        }
+
+        [TestMethod]
         public void ReadInt8MinTest()
         {
             // Initialize
@@ -182,6 +206,18 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
         }
 
         [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void ReadInt16NullTest()
+        {
+            // Initialize
+            Mock<IBitConverter> bitConverter = new Mock<IBitConverter>();
+            IPackStreamUnpacker unpacker = new PackStreamUnpacker(bitConverter.Object);
+
+            // Run
+            unpacker.ReadInt16(null);
+        }
+
+        [TestMethod]
         public void Read16MinTest()
         {
             // Initialize
@@ -215,6 +251,18 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
         }
 
         [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void ReadInt32NullTest()
+        {
+            // Initialize
+            Mock<IBitConverter> bitConverter = new Mock<IBitConverter>();
+            IPackStreamUnpacker unpacker = new PackStreamUnpacker(bitConverter.Object);
+
+            // Run
+            unpacker.ReadInt32(null);
+        }
+
+        [TestMethod]
         public void Read32MinTest()
         {
             // Initialize
@@ -245,6 +293,18 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
             ValidateHasIntValues(result);
             Assert.AreEqual(PackStreamType.Integer64, result.Type);
             Assert.AreEqual(8, result.IntValue.Value);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void ReadInt64NullTest()
+        {
+            // Initialize
+            Mock<IBitConverter> bitConverter = new Mock<IBitConverter>();
+            IPackStreamUnpacker unpacker = new PackStreamUnpacker(bitConverter.Object);
+
+            // Run
+            unpacker.ReadInt64(null);
         }
 
         [TestMethod]
@@ -331,6 +391,34 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
             ValidateHasIntValues(result);
             Assert.AreEqual(PackStreamType.Text, result.Type);
             Assert.AreEqual(300, result.IntValue);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void ReadTextNullTest()
+        {
+            // Initialize
+            Mock<IBitConverter> bitConverter = new Mock<IBitConverter>();
+            IPackStreamUnpacker unpacker = new PackStreamUnpacker(bitConverter.Object);
+
+            // Run
+            unpacker.ReadText(null, 10);
+        }
+
+        [TestMethod]
+        public void ReadTextTest()
+        {
+            // Initialize
+            byte[] streamBytes = new byte[] { 0x41, 0x42 };
+            Mock<IBitConverter> bitConverter = new Mock<IBitConverter>();
+            bitConverter.Setup(f => f.ToString(It.Is<byte[]>(g => ArraysEqual(g, streamBytes)))).Returns("Test");
+            IPackStreamUnpacker unpacker = new PackStreamUnpacker(bitConverter.Object);
+
+            // Run
+            string result = GetResult(s => unpacker.ReadText(s, streamBytes.Length), streamBytes);
+
+            // Validate
+            Assert.AreEqual("Test", result);
         }
 
         [TestMethod]

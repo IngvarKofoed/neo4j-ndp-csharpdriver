@@ -22,6 +22,8 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
 
         public PackStreamUnpackerResult ReadNextType(Stream stream)
         {
+            if (stream == null) throw new ArgumentNullException("stream");
+
             byte marker = (byte)stream.ReadByte();
             byte marker_low = (byte)(marker & 0x0F);
             byte marker_high = (byte)(marker & 0xF0);
@@ -160,12 +162,16 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
 
         public int ReadInt8(Stream stream)
         {
+            if (stream == null) throw new ArgumentNullException("stream");
+
             int value = stream.ReadByte();
             return value - 256;
         }
 
         public int ReadInt16(Stream stream)
         {
+            if (stream == null) throw new ArgumentNullException("stream");
+
             byte[] data = new byte[2];
             stream.Read(data);
             return bitConverter.ToInt16(data);
@@ -173,6 +179,8 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
 
         public int ReadInt32(Stream stream)
         {
+            if (stream == null) throw new ArgumentNullException("stream");
+
             byte[] data = new byte[4];
             stream.Read(data);
             return bitConverter.ToInt32(data);
@@ -180,6 +188,8 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
 
         public Int64 ReadInt64(Stream stream)
         {
+            if (stream == null) throw new ArgumentNullException("stream");
+
             byte[] data = new byte[8];
             stream.Read(data);
             return bitConverter.ToInt64(data);
@@ -187,6 +197,8 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
 
         public string ReadText(Stream stream, int length)
         {
+            if (stream == null) throw new ArgumentNullException("stream");
+
             byte[] textBytes = new byte[length];
             stream.Read(textBytes);
 
@@ -196,6 +208,8 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
 
         public StructureSignature ReadStructureSignature(Stream stream)
         {
+            if (stream == null) throw new ArgumentNullException("stream");
+
             return (StructureSignature)stream.ReadByte();
         }
     }

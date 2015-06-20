@@ -43,6 +43,9 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
             PackStreamUnpackerResult type = packStreamUnpacker.ReadNextType(stream);
             switch (type.Type)
             {
+                case PackStreamType.Null:
+                    return DeserializeNull();
+
                 case PackStreamType.Text:
                     if (!type.IntValue.HasValue) throw new InvalidOperationException("Expected length for text");
                     return DeserializeText(stream, type.IntValue.Value);
