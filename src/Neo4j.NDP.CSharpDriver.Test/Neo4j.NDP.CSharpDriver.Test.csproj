@@ -59,6 +59,7 @@
     <Compile Include="Serialization\PackStreamPackerTest.cs" />
     <Compile Include="Serialization\MessageStructureExtensionsTest.cs" />
     <Compile Include="Serialization\MessageObjectSerializerTest.cs" />
+    <Compile Include="Serialization\PackStreamUnpackerTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Neo4j.NDP.CSharpDriver\Neo4j.NDP.CSharpDriver.csproj">
