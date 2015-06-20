@@ -7,14 +7,20 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
     /// </summary>
     public sealed class PackStreamUnpackerResult
     {
+        private PackStreamUnpackerResult()
+        {
+            this.Length = null;
+            this.BoolValue = null;
+
+        }
         /// <summary>
         /// Instantiates a new instance of <see cref="PackStreamUnpackerResult"/>.
         /// </summary>
         /// <param name="type">The <see cref="PackStreamType"/> of the result.</param>
-        public PackStreamUnpackerResult(PackStreamType type)
+        public PackStreamUnpackerResult(PackStreamType type) :
+            this()
         {
             this.Type = type;
-            this.Length = null;
         }
 
         /// <summary>
@@ -22,10 +28,23 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
         /// </summary>
         /// <param name="type">The <see cref="PackStreamType"/> of the result.</param>
         /// <param name="length">The length of the pack stream type.</param>
-        public PackStreamUnpackerResult(PackStreamType type, int length)
+        public PackStreamUnpackerResult(PackStreamType type, int length) :
+            this()
         {
             this.Type = type;
             this.Length = length;
+        }
+
+        /// <summary>
+        /// Instantiates a new instance of <see cref="PackStreamUnpackerResult"/>.
+        /// </summary>
+        /// <param name="type">The <see cref="PackStreamType"/> of the result.</param>
+        /// <param name="boolValue">The value of the read bool.</param>
+        public PackStreamUnpackerResult(PackStreamType type, bool boolValue) :
+            this()
+        {
+            this.Type = type;
+            this.BoolValue = boolValue;
         }
 
         /// <summary>
@@ -38,6 +57,11 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
         /// This contains the length of that data. Else null.
         /// </summary>
         public int? Length { get; private set; }
+
+        /// <summary>
+        /// If the read type is bool (true/false) then this contains the value.
+        /// </summary>
+        public bool? BoolValue { get; private set; }
     }
 }
 

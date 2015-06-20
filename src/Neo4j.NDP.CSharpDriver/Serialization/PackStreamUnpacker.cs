@@ -25,6 +25,14 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
             {
                 return new PackStreamUnpackerResult(PackStreamType.Null);
             }
+            else if (marker == PackStreamPacker.FalseMarker)
+            {
+                return new PackStreamUnpackerResult(PackStreamType.Bool, false);
+            }
+            else if (marker == PackStreamPacker.TrueMarker)
+            {
+                return new PackStreamUnpackerResult(PackStreamType.Bool, true);
+            }
             else if (marker_high == PackStreamPacker.Text4BitMarker)
             {
                 int length = (int)marker_low;
