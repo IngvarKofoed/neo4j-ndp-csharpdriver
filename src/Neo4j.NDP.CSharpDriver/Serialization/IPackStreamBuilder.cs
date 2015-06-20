@@ -2,9 +2,11 @@
 
 namespace Neo4j.NDP.CSharpDriver.Serialization
 {
+    /// <summary>
     /// This builds an byte array in the PackStream format.
     /// It is building it like the System.Text.StringBuilder.
-   public interface IPackStreamBuilder
+    /// </summary>
+    public interface IPackStreamBuilder
     {
         /// <summary>
         /// Appends the given <paramref name="text"/> UTF8 encoded, to the reulst byte array.

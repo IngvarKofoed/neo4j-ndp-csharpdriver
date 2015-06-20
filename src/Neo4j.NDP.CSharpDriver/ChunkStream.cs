@@ -25,7 +25,8 @@ namespace Neo4j.NDP.CSharpDriver
         private readonly MessageObjectSerializer serializer = new MessageObjectSerializer(
             new PackSteamBuilderFactory(new BigEndianTargetBitConverter()));
         // TODO: Inject his
-        private readonly MessageObjectDeserializer deserializer = new MessageObjectDeserializer();
+        private readonly MessageObjectDeserializer deserializer = 
+            new MessageObjectDeserializer(new PackStreamUnpacker(new BigEndianTargetBitConverter()));
 
         public ChunkStream(Stream stream, ILogger logger = null)
         {

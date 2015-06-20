@@ -83,6 +83,10 @@
     <Compile Include="EntityType.cs" />
     <Compile Include="Serialization\EntityBuilder.cs" />
     <Compile Include="Serialization\IEntityBuilder.cs" />
+    <Compile Include="Serialization\IPackStreamUnpacker.cs" />
+    <Compile Include="Serialization\PackStreamUnpackerResult.cs" />
+    <Compile Include="Serialization\PackStreamType.cs" />
+    <Compile Include="Serialization\PackStreamUnpacker.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
