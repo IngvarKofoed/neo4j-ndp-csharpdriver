@@ -315,10 +315,62 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
         }
 
         [TestMethod]
-        public void Text32ResultTest()
+        public void List4ResultTest()
         {
             // Initialize
-            byte[] streamBytes = new byte[] { 0xD2, 0x01, 0x02, 0x03, 0x04 };
+            byte[] streamBytes = new byte[] { 0x92 };
+            Mock<IBitConverter> bitConverter = new Mock<IBitConverter>();
+            IPackStreamUnpacker unpacker = new PackStreamUnpacker(bitConverter.Object);
+
+            // Run
+            PackStreamUnpackerResult result = GetResult(s => unpacker.ReadNextType(s), streamBytes);
+
+            // Validate
+            ValidateHasIntValues(result);
+            Assert.AreEqual(PackStreamType.List, result.Type);
+            Assert.AreEqual(2, result.IntValue);
+        }
+
+        [TestMethod]
+        public void List8ResultTest()
+        {
+            // Initialize
+            byte[] streamBytes = new byte[] { 0xD4, 0x10 };
+            Mock<IBitConverter> bitConverter = new Mock<IBitConverter>();
+            IPackStreamUnpacker unpacker = new PackStreamUnpacker(bitConverter.Object);
+
+            // Run
+            PackStreamUnpackerResult result = GetResult(s => unpacker.ReadNextType(s), streamBytes);
+
+            // Validate
+            ValidateHasIntValues(result);
+            Assert.AreEqual(PackStreamType.List, result.Type);
+            Assert.AreEqual(16, result.IntValue);
+        }
+
+        [TestMethod]
+        public void List16ResultTest()
+        {
+            // Initialize
+            byte[] streamBytes = new byte[] { 0xD5, 0x01, 0x02 };
+            Mock<IBitConverter> bitConverter = new Mock<IBitConverter>();
+            bitConverter.Setup(f => f.ToInt16(It.Is<byte[]>(g => ArraysEqual(g, streamBytes.Skip(1).ToArray())))).Returns(300);
+            IPackStreamUnpacker unpacker = new PackStreamUnpacker(bitConverter.Object);
+
+            // Run
+            PackStreamUnpackerResult result = GetResult(s => unpacker.ReadNextType(s), streamBytes);
+
+            // Validate
+            ValidateHasIntValues(result);
+            Assert.AreEqual(PackStreamType.List, result.Type);
+            Assert.AreEqual(300, result.IntValue);
+        }
+
+        [TestMethod]
+        public void List32ResultTest()
+        {
+            // Initialize
+            byte[] streamBytes = new byte[] { 0xD6, 0x01, 0x02, 0x03, 0x04 };
             Mock<IBitConverter> bitConverter = new Mock<IBitConverter>();
             bitConverter.Setup(f => f.ToInt32(It.Is<byte[]>(g => ArraysEqual(g, streamBytes.Skip(1).ToArray())))).Returns(300);
             IPackStreamUnpacker unpacker = new PackStreamUnpacker(bitConverter.Object);
@@ -328,7 +380,7 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
 
             // Validate
             ValidateHasIntValues(result);
-            Assert.AreEqual(PackStreamType.Text, result.Type);
+            Assert.AreEqual(PackStreamType.List, result.Type);
             Assert.AreEqual(300, result.IntValue);
         }
 

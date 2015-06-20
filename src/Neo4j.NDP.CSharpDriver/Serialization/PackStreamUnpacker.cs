@@ -89,8 +89,27 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
             }
             else if (marker_high == PackStreamPacker.List4Marker)
             {
-                int itemCount = (int)marker_low;
-                return new PackStreamUnpackerResult(PackStreamType.List, itemCount);
+                int length = (int)marker_low;
+                return new PackStreamUnpackerResult(PackStreamType.List, length);
+            }
+            else if (marker == PackStreamPacker.List8Marker)
+            {
+                int length = stream.ReadByte();
+                return new PackStreamUnpackerResult(PackStreamType.List, length);
+            }
+            else if (marker == PackStreamPacker.List16Marker)
+            {
+                byte[] lengthBytes = new byte[2];
+                stream.Read(lengthBytes);
+                int length = bitConverter.ToInt16(lengthBytes);
+                return new PackStreamUnpackerResult(PackStreamType.List, length);
+            }
+            else if (marker == PackStreamPacker.List32Marker)
+            {
+                byte[] lengthBytes = new byte[4];
+                stream.Read(lengthBytes);
+                int length = bitConverter.ToInt32(lengthBytes);
+                return new PackStreamUnpackerResult(PackStreamType.List, length);
             }
             else if (marker_high == PackStreamPacker.Map4Marker)
             {
