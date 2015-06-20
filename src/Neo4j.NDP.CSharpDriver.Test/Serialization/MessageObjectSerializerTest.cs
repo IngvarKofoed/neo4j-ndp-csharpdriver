@@ -23,7 +23,7 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
         public void NullMessageObjectArgumentTest()
         {
             // Initialie
-            Mock<IPackSteamBuilderFactory> factory = new Mock<IPackSteamBuilderFactory>();
+            Mock<IPackStreamPackerFactory> factory = new Mock<IPackStreamPackerFactory>();
             MessageObjectSerializer serializer = new MessageObjectSerializer(factory.Object);
 
             // Run
@@ -36,10 +36,10 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
             // Initialie
             const string testString = "Test";
             byte[] testBytes = new byte[] { 0xAB };
-            Mock<IPackStreamBuilder> builder = new Mock<IPackStreamBuilder>();
-            builder.Setup(f => f.GetBytes()).Returns(testBytes);
-            Mock<IPackSteamBuilderFactory> factory = new Mock<IPackSteamBuilderFactory>();
-            factory.Setup(f => f.Create()).Returns(builder.Object);
+            Mock<IPackStreamPacker> packer = new Mock<IPackStreamPacker>();
+            packer.Setup(f => f.GetBytes()).Returns(testBytes);
+            Mock<IPackStreamPackerFactory> factory = new Mock<IPackStreamPackerFactory>();
+            factory.Setup(f => f.Create()).Returns(packer.Object);
 
             MessageObjectSerializer serializer = new MessageObjectSerializer(factory.Object);
             MessageText messageText = new MessageText(testString);
@@ -48,7 +48,7 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
             byte[] result = serializer.Serialize(messageText);
 
             // Validate
-            builder.Verify(f => f.Append(testString));
+            packer.Verify(f => f.Append(testString));
             Assert.IsNotNull(result);
             Assert.AreEqual(1, result.Length);
             Assert.AreEqual(testBytes[0], result[0]);
@@ -60,10 +60,10 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
             // Initialie
             const string testString = "Test";
             byte[] testBytes = new byte[] { 0xAB };
-            Mock<IPackStreamBuilder> builder = new Mock<IPackStreamBuilder>();
-            builder.Setup(f => f.GetBytes()).Returns(testBytes);
-            Mock<IPackSteamBuilderFactory> factory = new Mock<IPackSteamBuilderFactory>();
-            factory.Setup(f => f.Create()).Returns(builder.Object);
+            Mock<IPackStreamPacker> packer = new Mock<IPackStreamPacker>();
+            packer.Setup(f => f.GetBytes()).Returns(testBytes);
+            Mock<IPackStreamPackerFactory> factory = new Mock<IPackStreamPackerFactory>();
+            factory.Setup(f => f.Create()).Returns(packer.Object);
 
             MessageObjectSerializer serializer = new MessageObjectSerializer(factory.Object);
             MessageList messageList = new MessageList(new MessageText(testString));
@@ -72,8 +72,8 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
             byte[] result = serializer.Serialize(messageList);
 
             // Validate
-            builder.Verify(f => f.AppendListHeader(1));
-            builder.Verify(f => f.Append(testString));
+            packer.Verify(f => f.AppendListHeader(1));
+            packer.Verify(f => f.Append(testString));
             Assert.IsNotNull(result);
             Assert.AreEqual(1, result.Length);
             Assert.AreEqual(testBytes[0], result[0]);
@@ -86,10 +86,10 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
             const string testString1 = "Test1";
             const string testString2 = "Test2";
             byte[] testBytes = new byte[] { 0xAB };
-            Mock<IPackStreamBuilder> builder = new Mock<IPackStreamBuilder>();
-            builder.Setup(f => f.GetBytes()).Returns(testBytes);
-            Mock<IPackSteamBuilderFactory> factory = new Mock<IPackSteamBuilderFactory>();
-            factory.Setup(f => f.Create()).Returns(builder.Object);
+            Mock<IPackStreamPacker> packer = new Mock<IPackStreamPacker>();
+            packer.Setup(f => f.GetBytes()).Returns(testBytes);
+            Mock<IPackStreamPackerFactory> factory = new Mock<IPackStreamPackerFactory>();
+            factory.Setup(f => f.Create()).Returns(packer.Object);
 
             MessageObjectSerializer serializer = new MessageObjectSerializer(factory.Object);
             MessageMap messageMap = new MessageMap(
@@ -101,9 +101,9 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
             byte[] result = serializer.Serialize(messageMap);
 
             // Validate
-            builder.Verify(f => f.AppendMapHeader(1));
-            builder.Verify(f => f.Append(testString1));
-            builder.Verify(f => f.Append(testString2));
+            packer.Verify(f => f.AppendMapHeader(1));
+            packer.Verify(f => f.Append(testString1));
+            packer.Verify(f => f.Append(testString2));
             Assert.IsNotNull(result);
             Assert.AreEqual(1, result.Length);
             Assert.AreEqual(testBytes[0], result[0]);
@@ -115,10 +115,10 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
             // Initialie
             const string testString = "Test";
             byte[] testBytes = new byte[] { 0xAB };
-            Mock<IPackStreamBuilder> builder = new Mock<IPackStreamBuilder>();
-            builder.Setup(f => f.GetBytes()).Returns(testBytes);
-            Mock<IPackSteamBuilderFactory> factory = new Mock<IPackSteamBuilderFactory>();
-            factory.Setup(f => f.Create()).Returns(builder.Object);
+            Mock<IPackStreamPacker> packer = new Mock<IPackStreamPacker>();
+            packer.Setup(f => f.GetBytes()).Returns(testBytes);
+            Mock<IPackStreamPackerFactory> factory = new Mock<IPackStreamPackerFactory>();
+            factory.Setup(f => f.Create()).Returns(packer.Object);
 
             MessageObjectSerializer serializer = new MessageObjectSerializer(factory.Object);
             MessageStructure messageStructure = new MessageStructure(
@@ -129,8 +129,8 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
             byte[] result = serializer.Serialize(messageStructure);
 
             // Validate
-            builder.Verify(f => f.AppendStructureHeader(StructureSignature.Init, 1));
-            builder.Verify(f => f.Append(testString));
+            packer.Verify(f => f.AppendStructureHeader(StructureSignature.Init, 1));
+            packer.Verify(f => f.Append(testString));
             Assert.IsNotNull(result);
             Assert.AreEqual(1, result.Length);
             Assert.AreEqual(testBytes[0], result[0]);

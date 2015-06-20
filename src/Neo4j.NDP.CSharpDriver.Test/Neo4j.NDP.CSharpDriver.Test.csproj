@@ -56,7 +56,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Serialization\LittleEndianTargetBitConverterTest.cs" />
     <Compile Include="Serialization\BigEndianTargetBitConverterTest.cs" />
-    <Compile Include="Serialization\PackStreamBuilderTest.cs" />
+    <Compile Include="Serialization\PackStreamPackerTest.cs" />
     <Compile Include="Serialization\MessageStructureExtensionsTest.cs" />
     <Compile Include="Serialization\MessageObjectSerializerTest.cs" />
   </ItemGroup>
