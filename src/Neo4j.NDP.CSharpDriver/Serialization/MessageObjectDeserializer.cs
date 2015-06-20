@@ -8,7 +8,7 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
     /// <summary>
     /// Deserializes bytes (from a stream) in the PackStream format to a <see cref="IMessageObject"/> tree.
     /// </summary>
-    public class MessageObjectDeserializer
+    public class MessageObjectDeserializer : IMessageObjectDeserializer
     {
         private readonly IPackStreamUnpacker packStreamUnpacker;
 
@@ -45,6 +45,10 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
             {
                 case PackStreamType.Null:
                     return DeserializeNull();
+
+                case PackStreamType.Bool:
+                    if (!type.BoolValue.HasValue) throw new InvalidOperationException("Expected bool value");
+                    return new MessageBool(type.BoolValue.Value);
 
                 case PackStreamType.Text:
                     if (!type.IntValue.HasValue) throw new InvalidOperationException("Expected length for text");

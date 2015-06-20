@@ -7,9 +7,10 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
     public enum MessageObjectType
     {
         Null = 0,
-        Text = 1,
-        Map = 2,
-        List = 3,
-        Structure = 4
+        Bool = 1,
+        Text = 2,
+        Map = 3,
+        List = 4,
+        Structure = 5
     }
 }

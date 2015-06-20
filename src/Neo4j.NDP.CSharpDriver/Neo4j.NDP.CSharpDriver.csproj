@@ -51,12 +51,15 @@
     <Compile Include="ChunkStream.cs" />
     <Compile Include="Serialization\IBitConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Serialization\IMessageBool.cs" />
     <Compile Include="Serialization\IMessageList.cs" />
     <Compile Include="Serialization\IMessageMap.cs" />
     <Compile Include="Serialization\IMessageNull.cs" />
     <Compile Include="Serialization\IMessageObject.cs" />
+    <Compile Include="Serialization\IMessageObjectDeserializer.cs" />
     <Compile Include="Serialization\IMessageStructure.cs" />
     <Compile Include="Serialization\LittleEndianTargetBitConverter.cs" />
+    <Compile Include="Serialization\MessageBool.cs" />
     <Compile Include="Serialization\MessageList.cs" />
     <Compile Include="Serialization\MessageMap.cs" />
     <Compile Include="Serialization\MessageNull.cs" />
