@@ -44,11 +44,27 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
             switch (type.Type)
             {
                 case PackStreamType.Null:
-                    return DeserializeNull();
+                    return new MessageNull();
 
                 case PackStreamType.Bool:
                     if (!type.BoolValue.HasValue) throw new InvalidOperationException("Expected bool value");
                     return new MessageBool(type.BoolValue.Value);
+
+                case PackStreamType.Integer4:
+                    if (!type.IntValue.HasValue) throw new InvalidOperationException("Expected length for int");
+                    return new MessageInt(type.IntValue.Value);
+
+                case PackStreamType.Integer8:
+                    return DeserializeInt8(stream);
+
+                case PackStreamType.Integer16:
+                    return DeserializeInt16(stream);
+
+                case PackStreamType.Integer32:
+                    return DeserializeInt32(stream);
+
+                case PackStreamType.Integer64:
+                    return DeserializeInt64(stream);
 
                 case PackStreamType.Text:
                     if (!type.IntValue.HasValue) throw new InvalidOperationException("Expected length for text");
@@ -71,9 +87,28 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
             }
         }
 
-        private IMessageNull DeserializeNull()
+        private IMessageInt DeserializeInt8(Stream stream)
         {
-            return new MessageNull();
+            int value = packStreamUnpacker.ReadInt8(stream);
+            return new MessageInt(value);
+        }
+
+        private IMessageInt DeserializeInt16(Stream stream)
+        {
+            int value = packStreamUnpacker.ReadInt16(stream);
+            return new MessageInt(value);
+        }
+
+        private IMessageInt DeserializeInt32(Stream stream)
+        {
+            int value = packStreamUnpacker.ReadInt32(stream);
+            return new MessageInt(value);
+        }
+
+        private IMessageInt DeserializeInt64(Stream stream)
+        {
+            Int64 value = packStreamUnpacker.ReadInt64(stream);
+            return new MessageInt(value);
         }
 
         private IMessageText DeserializeText(Stream stream, int length)

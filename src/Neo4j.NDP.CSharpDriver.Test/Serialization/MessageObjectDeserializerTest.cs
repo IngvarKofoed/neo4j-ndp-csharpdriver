@@ -70,6 +70,100 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
             Assert.AreEqual(true, messageBool.Value);
         }
 
+        [TestMethod]
+        public void DeserializeInt4Test()
+        {
+            // Initialize
+            Stream stream = new FakeStream();
+            Mock<IPackStreamUnpacker> unpacker = new Mock<IPackStreamUnpacker>();
+            unpacker.Setup(f => f.ReadNextType(stream)).Returns(new PackStreamUnpackerResult(PackStreamType.Integer4, 2));
+            IMessageObjectDeserializer deserializer = new MessageObjectDeserializer(unpacker.Object);
+
+            // Run
+            IMessageInt messageInt = deserializer.Deserialize(stream) as IMessageInt;
+
+            // Validate
+            Assert.IsNotNull(messageInt);
+            Assert.AreEqual(MessageObjectType.Int, messageInt.Type);
+            Assert.AreEqual(2, messageInt.Value);
+        }
+
+        [TestMethod]
+        public void DeserializeInt8Test()
+        {
+            // Initialize
+            Stream stream = new FakeStream();
+            Mock<IPackStreamUnpacker> unpacker = new Mock<IPackStreamUnpacker>();
+            unpacker.Setup(f => f.ReadNextType(stream)).Returns(new PackStreamUnpackerResult(PackStreamType.Integer8));
+            unpacker.Setup(f => f.ReadInt8(stream)).Returns(2);
+            IMessageObjectDeserializer deserializer = new MessageObjectDeserializer(unpacker.Object);
+
+            // Run
+            IMessageInt messageInt = deserializer.Deserialize(stream) as IMessageInt;
+
+            // Validate
+            Assert.IsNotNull(messageInt);
+            Assert.AreEqual(MessageObjectType.Int, messageInt.Type);
+            Assert.AreEqual(2, messageInt.Value);
+        }
+
+        [TestMethod]
+        public void DeserializeInt16Test()
+        {
+            // Initialize
+            Stream stream = new FakeStream();
+            Mock<IPackStreamUnpacker> unpacker = new Mock<IPackStreamUnpacker>();
+            unpacker.Setup(f => f.ReadNextType(stream)).Returns(new PackStreamUnpackerResult(PackStreamType.Integer16));
+            unpacker.Setup(f => f.ReadInt16(stream)).Returns(2);
+            IMessageObjectDeserializer deserializer = new MessageObjectDeserializer(unpacker.Object);
+
+            // Run
+            IMessageInt messageInt = deserializer.Deserialize(stream) as IMessageInt;
+
+            // Validate
+            Assert.IsNotNull(messageInt);
+            Assert.AreEqual(MessageObjectType.Int, messageInt.Type);
+            Assert.AreEqual(2, messageInt.Value);
+        }
+
+        [TestMethod]
+        public void DeserializeInt32Test()
+        {
+            // Initialize
+            Stream stream = new FakeStream();
+            Mock<IPackStreamUnpacker> unpacker = new Mock<IPackStreamUnpacker>();
+            unpacker.Setup(f => f.ReadNextType(stream)).Returns(new PackStreamUnpackerResult(PackStreamType.Integer32));
+            unpacker.Setup(f => f.ReadInt32(stream)).Returns(2);
+            IMessageObjectDeserializer deserializer = new MessageObjectDeserializer(unpacker.Object);
+
+            // Run
+            IMessageInt messageInt = deserializer.Deserialize(stream) as IMessageInt;
+
+            // Validate
+            Assert.IsNotNull(messageInt);
+            Assert.AreEqual(MessageObjectType.Int, messageInt.Type);
+            Assert.AreEqual(2, messageInt.Value);
+        }
+
+        [TestMethod]
+        public void DeserializeInt64Test()
+        {
+            // Initialize
+            Stream stream = new FakeStream();
+            Mock<IPackStreamUnpacker> unpacker = new Mock<IPackStreamUnpacker>();
+            unpacker.Setup(f => f.ReadNextType(stream)).Returns(new PackStreamUnpackerResult(PackStreamType.Integer64));
+            unpacker.Setup(f => f.ReadInt64(stream)).Returns(2);
+            IMessageObjectDeserializer deserializer = new MessageObjectDeserializer(unpacker.Object);
+
+            // Run
+            IMessageInt messageInt = deserializer.Deserialize(stream) as IMessageInt;
+
+            // Validate
+            Assert.IsNotNull(messageInt);
+            Assert.AreEqual(MessageObjectType.Int, messageInt.Type);
+            Assert.AreEqual(2, messageInt.Value);
+        }
+
 
         public class FakeStream : Stream
         {
