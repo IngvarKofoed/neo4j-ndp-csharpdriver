@@ -38,6 +38,31 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
             {
                 return new PackStreamUnpackerResult(PackStreamType.Bool, true);
             }
+            else if (PackStreamConstants.Int4Min <= marker)
+            {
+                // Note that Int4Min is calculated like this 256 + PackStreamConstants.Int4Min which is a large byte value
+                return new PackStreamUnpackerResult(PackStreamType.Integer4, (int)marker - 256);
+            }
+            else if (marker <= PackStreamConstants.Int4Max)
+            {
+                return new PackStreamUnpackerResult(PackStreamType.Integer4, (int)marker);
+            }
+            else if (marker == PackStreamConstants.Int8Marker)
+            {
+                return new PackStreamUnpackerResult(PackStreamType.Integer8, 1);
+            }
+            else if (marker == PackStreamConstants.Int16Marker)
+            {
+                return new PackStreamUnpackerResult(PackStreamType.Integer16, 2);
+            }
+            else if (marker == PackStreamConstants.Int32Marker)
+            {
+                return new PackStreamUnpackerResult(PackStreamType.Integer32, 4);
+            }
+            else if (marker == PackStreamConstants.Int64Marker)
+            {
+                return new PackStreamUnpackerResult(PackStreamType.Integer64, 8);
+            }
             else if (marker_high == PackStreamPacker.Text4BitMarker)
             {
                 int length = (int)marker_low;
@@ -81,6 +106,33 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
             {
                 throw new InvalidOperationException(string.Format("Marker not supported: {0:X2}", marker));
             }
+        }
+
+        public int ReadInt8(Stream stream)
+        {
+            int value = stream.ReadByte();
+            return value - 256;
+        }
+
+        public int ReadInt16(Stream stream)
+        {
+            byte[] data = new byte[2];
+            stream.Read(data);
+            return bitConverter.ToInt16(data);
+        }
+
+        public int ReadInt32(Stream stream)
+        {
+            byte[] data = new byte[4];
+            stream.Read(data);
+            return bitConverter.ToInt32(data);
+        }
+
+        public Int64 ReadInt64(Stream stream)
+        {
+            byte[] data = new byte[8];
+            stream.Read(data);
+            return bitConverter.ToInt64(data);
         }
 
         public string ReadText(Stream stream, int length)

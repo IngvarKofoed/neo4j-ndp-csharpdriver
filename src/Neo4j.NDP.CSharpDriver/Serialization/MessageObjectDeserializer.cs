@@ -44,20 +44,20 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
             switch (type.Type)
             {
                 case PackStreamType.Text:
-                    if (!type.Length.HasValue) throw new InvalidOperationException("Expected length for text");
-                    return DeserializeText(stream, type.Length.Value);
+                    if (!type.IntValue.HasValue) throw new InvalidOperationException("Expected length for text");
+                    return DeserializeText(stream, type.IntValue.Value);
 
                 case PackStreamType.List:
-                    if (!type.Length.HasValue) throw new InvalidOperationException("Expected length for list");
-                    return DeserializeList(stream, type.Length.Value);
+                    if (!type.IntValue.HasValue) throw new InvalidOperationException("Expected length for list");
+                    return DeserializeList(stream, type.IntValue.Value);
 
                 case PackStreamType.Map:
-                    if (!type.Length.HasValue) throw new InvalidOperationException("Expected length for map");
-                    return DeserializeMap(stream, type.Length.Value);
+                    if (!type.IntValue.HasValue) throw new InvalidOperationException("Expected length for map");
+                    return DeserializeMap(stream, type.IntValue.Value);
 
                 case PackStreamType.Structure:
-                    if (!type.Length.HasValue) throw new InvalidOperationException("Expected length for structure");
-                    return DeserializeStructure(stream, type.Length.Value);
+                    if (!type.IntValue.HasValue) throw new InvalidOperationException("Expected length for structure");
+                    return DeserializeStructure(stream, type.IntValue.Value);
 
                 default:
                     throw new NotImplementedException("Unhandled pack stream type: " + type);

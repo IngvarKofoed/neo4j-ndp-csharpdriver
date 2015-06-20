@@ -68,6 +68,7 @@
     <Compile Include="Serialization\MessageStructureExtensions.cs" />
     <Compile Include="Serialization\MessageText.cs" />
     <Compile Include="Extensions\StreamExtensions.cs" />
+    <Compile Include="Serialization\PackStreamConstants.cs" />
     <Compile Include="StructureSignature.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="IEntity.cs" />

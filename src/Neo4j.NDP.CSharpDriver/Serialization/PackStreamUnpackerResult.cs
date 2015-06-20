@@ -9,7 +9,7 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
     {
         private PackStreamUnpackerResult()
         {
-            this.Length = null;
+            this.IntValue = null;
             this.BoolValue = null;
 
         }
@@ -27,12 +27,12 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
         /// Instantiates a new instance of <see cref="PackStreamUnpackerResult"/>.
         /// </summary>
         /// <param name="type">The <see cref="PackStreamType"/> of the result.</param>
-        /// <param name="length">The length of the pack stream type.</param>
+        /// <param name="length">The int value of the pack stream type.</param>
         public PackStreamUnpackerResult(PackStreamType type, int length) :
             this()
         {
             this.Type = type;
-            this.Length = length;
+            this.IntValue = length;
         }
 
         /// <summary>
@@ -53,13 +53,15 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
         public PackStreamType Type { get; private set; }
 
         /// <summary>
-        /// If the following data in the pack stream has a length (text, list, map, structure, etc).
-        /// This contains the length of that data. Else null.
+        /// If the read pack stream text, list, map, structure, then this contains the length of that data.
+        /// If the read pack stream type is int4, then this contains the value.
+        /// Anything else, this is null.
         /// </summary>
-        public int? Length { get; private set; }
+        public int? IntValue { get; private set; }
 
         /// <summary>
         /// If the read type is bool (true/false) then this contains the value.
+        /// Else null.
         /// </summary>
         public bool? BoolValue { get; private set; }
     }

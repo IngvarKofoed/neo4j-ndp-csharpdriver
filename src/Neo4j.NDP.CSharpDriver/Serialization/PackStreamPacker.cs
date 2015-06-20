@@ -10,6 +10,7 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
     /// </summary>
     public sealed class PackStreamPacker : IPackStreamPacker
     {
+        // TODO: Move these markers to common static class
         // Simple
         public static readonly byte NullMarker = 0xC0;
         public static readonly byte TrueMarker = 0xC3;

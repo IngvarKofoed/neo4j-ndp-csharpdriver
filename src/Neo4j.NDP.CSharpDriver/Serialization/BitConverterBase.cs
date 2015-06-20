@@ -104,6 +104,17 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
         }
 
         /// <summary>
+        /// Converts an byte array to a int (Int64).
+        /// </summary>
+        /// <param name="bytes">The byte array to convert.</param>
+        /// <returns>A int (Int64) converted from the byte array.</returns>
+        public Int64 ToInt64(byte[] bytes)
+        {
+            bytes = ToPlatformEndian(bytes);
+            return BitConverter.ToInt64(bytes, 0);
+        }
+
+        /// <summary>
         /// Converts an byte array of a UTF8 encoded string to a string
         /// </summary>
         /// <param name="bytes">The byte array to convert.</param>

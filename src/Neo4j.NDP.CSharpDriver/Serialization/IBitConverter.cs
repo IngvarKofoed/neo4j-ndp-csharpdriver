@@ -1,4 +1,6 @@
-﻿
+﻿using System;
+
+
 namespace Neo4j.NDP.CSharpDriver.Serialization
 {
     /// <summary>
@@ -61,6 +63,13 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
         /// <param name="bytes">The byte array to convert.</param>
         /// <returns>A int (Int32) converted from the byte array.</returns>
         int ToInt32(byte[] bytes);
+
+        /// <summary>
+        /// Converts an byte array to a int (Int64).
+        /// </summary>
+        /// <param name="bytes">The byte array to convert.</param>
+        /// <returns>A int (Int64) converted from the byte array.</returns>
+        Int64 ToInt64(byte[] bytes);
 
         /// <summary>
         /// Converts an byte array of a UTF8 encoded string to a string
