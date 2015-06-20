@@ -384,6 +384,75 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
             Assert.AreEqual(300, result.IntValue);
         }
 
+        [TestMethod]
+        public void Map4ResultTest()
+        {
+            // Initialize
+            byte[] streamBytes = new byte[] { 0xA2 };
+            Mock<IBitConverter> bitConverter = new Mock<IBitConverter>();
+            IPackStreamUnpacker unpacker = new PackStreamUnpacker(bitConverter.Object);
+
+            // Run
+            PackStreamUnpackerResult result = GetResult(s => unpacker.ReadNextType(s), streamBytes);
+
+            // Validate
+            ValidateHasIntValues(result);
+            Assert.AreEqual(PackStreamType.Map, result.Type);
+            Assert.AreEqual(2, result.IntValue);
+        }
+
+        [TestMethod]
+        public void Map8ResultTest()
+        {
+            // Initialize
+            byte[] streamBytes = new byte[] { 0xD8, 0x10 };
+            Mock<IBitConverter> bitConverter = new Mock<IBitConverter>();
+            IPackStreamUnpacker unpacker = new PackStreamUnpacker(bitConverter.Object);
+
+            // Run
+            PackStreamUnpackerResult result = GetResult(s => unpacker.ReadNextType(s), streamBytes);
+
+            // Validate
+            ValidateHasIntValues(result);
+            Assert.AreEqual(PackStreamType.Map, result.Type);
+            Assert.AreEqual(16, result.IntValue);
+        }
+
+        [TestMethod]
+        public void Map16ResultTest()
+        {
+            // Initialize
+            byte[] streamBytes = new byte[] { 0xD9, 0x01, 0x02 };
+            Mock<IBitConverter> bitConverter = new Mock<IBitConverter>();
+            bitConverter.Setup(f => f.ToInt16(It.Is<byte[]>(g => ArraysEqual(g, streamBytes.Skip(1).ToArray())))).Returns(300);
+            IPackStreamUnpacker unpacker = new PackStreamUnpacker(bitConverter.Object);
+
+            // Run
+            PackStreamUnpackerResult result = GetResult(s => unpacker.ReadNextType(s), streamBytes);
+
+            // Validate
+            ValidateHasIntValues(result);
+            Assert.AreEqual(PackStreamType.Map, result.Type);
+            Assert.AreEqual(300, result.IntValue);
+        }
+
+        [TestMethod]
+        public void Map32ResultTest()
+        {
+            // Initialize
+            byte[] streamBytes = new byte[] { 0xDA, 0x01, 0x02, 0x03, 0x04 };
+            Mock<IBitConverter> bitConverter = new Mock<IBitConverter>();
+            bitConverter.Setup(f => f.ToInt32(It.Is<byte[]>(g => ArraysEqual(g, streamBytes.Skip(1).ToArray())))).Returns(300);
+            IPackStreamUnpacker unpacker = new PackStreamUnpacker(bitConverter.Object);
+
+            // Run
+            PackStreamUnpackerResult result = GetResult(s => unpacker.ReadNextType(s), streamBytes);
+
+            // Validate
+            ValidateHasIntValues(result);
+            Assert.AreEqual(PackStreamType.Map, result.Type);
+            Assert.AreEqual(300, result.IntValue);
+        }
         private void ValidateHasNoValues(PackStreamUnpackerResult result)
         {
             Assert.IsNotNull(result);
