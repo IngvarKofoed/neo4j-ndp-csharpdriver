@@ -56,8 +56,6 @@
     <Compile Include="Serialization\IMessageNull.cs" />
     <Compile Include="Serialization\IMessageObject.cs" />
     <Compile Include="Serialization\IMessageStructure.cs" />
-    <Compile Include="Serialization\IPackSteamBuilderFactory.cs" />
-    <Compile Include="Serialization\IPackStreamBuilder.cs" />
     <Compile Include="Serialization\LittleEndianTargetBitConverter.cs" />
     <Compile Include="Serialization\MessageList.cs" />
     <Compile Include="Serialization\MessageMap.cs" />
@@ -69,8 +67,6 @@
     <Compile Include="Serialization\MessageStructure.cs" />
     <Compile Include="Serialization\MessageStructureExtensions.cs" />
     <Compile Include="Serialization\MessageText.cs" />
-    <Compile Include="Serialization\PackSteamBuilderFactory.cs" />
-    <Compile Include="Serialization\PackStreamBuilder.cs" />
     <Compile Include="Extensions\StreamExtensions.cs" />
     <Compile Include="StructureSignature.cs" />
     <Compile Include="Entity.cs" />
@@ -87,6 +83,10 @@
     <Compile Include="Serialization\PackStreamUnpackerResult.cs" />
     <Compile Include="Serialization\PackStreamType.cs" />
     <Compile Include="Serialization\PackStreamUnpacker.cs" />
+    <Compile Include="Serialization\IPackStreamPacker.cs" />
+    <Compile Include="Serialization\PackStreamPacker.cs" />
+    <Compile Include="Serialization\IPackStreamPackerFactory.cs" />
+    <Compile Include="Serialization\PackStreamPackerFactory.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

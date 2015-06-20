@@ -8,7 +8,7 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
     /// This builds an byte array in the PackStream format.
     /// It is building it like the System.Text.StringBuilder.
     /// </summary>
-    public sealed class PackStreamBuilder : IPackStreamBuilder
+    public sealed class PackStreamPacker : IPackStreamPacker
     {
         // Simple
         public static readonly byte NullMarker = 0xC0;
@@ -43,10 +43,10 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
         private List<byte> bytes = new List<byte>();
 
         /// <summary>
-        /// Constructs a <see cref="PackStreamBuilder"/>.
+        /// Constructs a <see cref="PackStreamPacker"/>.
         /// </summary>
         /// <param name="bitConverter">The bit converter to use.</param>
-        public PackStreamBuilder(IBitConverter bitConverter)
+        public PackStreamPacker(IBitConverter bitConverter)
         {
             this.bitConverter = bitConverter;
         }

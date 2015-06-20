@@ -8,13 +8,13 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
     /// </summary>
     public class MessageObjectSerializer
     {
-        private readonly IPackSteamBuilderFactory packSteamBuilderFactory;
+        private readonly IPackStreamPackerFactory packSteamPackerFactory;
 
-        public MessageObjectSerializer(IPackSteamBuilderFactory packSteamBuilderFactory)
+        public MessageObjectSerializer(IPackStreamPackerFactory packSteamPackerFactory)
         {
-            if (packSteamBuilderFactory == null) throw new ArgumentNullException("packSteamBuilderFactory");
+            if (packSteamPackerFactory == null) throw new ArgumentNullException("packSteamBuilderFactory");
 
-            this.packSteamBuilderFactory = packSteamBuilderFactory;
+            this.packSteamPackerFactory = packSteamPackerFactory;
         }
 
         /// <summary>
@@ -26,12 +26,12 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
         {
             if (messageObject == null) throw new ArgumentNullException("messageObject");
 
-            IPackStreamBuilder builder = packSteamBuilderFactory.Create();
+            IPackStreamPacker builder = packSteamPackerFactory.Create();
             Serialize(messageObject, builder);
             return builder.GetBytes();
         }
 
-        private void Serialize(IMessageObject messageObject, IPackStreamBuilder builder)
+        private void Serialize(IMessageObject messageObject, IPackStreamPacker builder)
         {
             switch (messageObject.Type)
             {
@@ -56,12 +56,12 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
             }
         }
 
-        private void Serialize(IMessageText messageText, IPackStreamBuilder builder)
+        private void Serialize(IMessageText messageText, IPackStreamPacker builder)
         {
             builder.Append(messageText.Text);
         }
 
-        private void Serialize(IMessageList messageList, IPackStreamBuilder builder)
+        private void Serialize(IMessageList messageList, IPackStreamPacker builder)
         {
             builder.AppendListHeader(messageList.Items.Count);
             foreach (IMessageObject item in messageList.Items)
@@ -70,7 +70,7 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
             }
         }
 
-        private void Serialize(IMessageMap messageMap, IPackStreamBuilder builder)
+        private void Serialize(IMessageMap messageMap, IPackStreamPacker builder)
         {
             builder.AppendMapHeader(messageMap.Map.Count);
             foreach (KeyValuePair<IMessageObject, IMessageObject> pair in messageMap.Map)
@@ -80,7 +80,7 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
             }
         }
 
-        private void Serialize(IMessageStructure messageStructure, IPackStreamBuilder builder)
+        private void Serialize(IMessageStructure messageStructure, IPackStreamPacker builder)
         {
             builder.AppendStructureHeader(messageStructure.Signature, messageStructure.Fields.Count);
             foreach (IMessageObject fieldMessageObject in messageStructure.Fields)

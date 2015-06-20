@@ -21,45 +21,45 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
             byte marker_low = (byte)(marker & 0x0F);
             byte marker_high = (byte)(marker & 0xF0);
 
-            if (marker == PackStreamBuilder.NullMarker)
+            if (marker == PackStreamPacker.NullMarker)
             {
                 return new PackStreamUnpackerResult(PackStreamType.Null);
             }
-            else if (marker_high == PackStreamBuilder.Text4BitMarker)
+            else if (marker_high == PackStreamPacker.Text4BitMarker)
             {
                 int length = (int)marker_low;
                 return new PackStreamUnpackerResult(PackStreamType.Text, length);
             }
-            if (marker == PackStreamBuilder.Text8BitMarker)
+            if (marker == PackStreamPacker.Text8BitMarker)
             {
                 int length = (int)stream.ReadByte();
                 return new PackStreamUnpackerResult(PackStreamType.Text, length);
             }
-            else if (marker == PackStreamBuilder.Text16BitMarker)
+            else if (marker == PackStreamPacker.Text16BitMarker)
             {
                 byte[] lengthBytes = new byte[2];
                 stream.Read(lengthBytes);
                 int length = bitConverter.ToInt16(lengthBytes);
                 return new PackStreamUnpackerResult(PackStreamType.Text, length);
             }
-            else if (marker == PackStreamBuilder.Text32BitMarker)
+            else if (marker == PackStreamPacker.Text32BitMarker)
             {
                 byte[] lengthBytes = new byte[4];
                 stream.Read(lengthBytes);
                 int length = bitConverter.ToInt32(lengthBytes);
                 return new PackStreamUnpackerResult(PackStreamType.Text, length);
             }
-            else if (marker_high == PackStreamBuilder.List4BitMarker)
+            else if (marker_high == PackStreamPacker.List4BitMarker)
             {
                 int itemCount = (int)marker_low;
                 return new PackStreamUnpackerResult(PackStreamType.List, itemCount);
             }
-            else if (marker_high == PackStreamBuilder.Map4BitMarker)
+            else if (marker_high == PackStreamPacker.Map4BitMarker)
             {
                 int mapCount = (int)marker_low;
                 return new PackStreamUnpackerResult(PackStreamType.Map, mapCount);
             }
-            else if (marker_high == PackStreamBuilder.Structure4BitMarker)
+            else if (marker_high == PackStreamPacker.Structure4BitMarker)
             {
                 int fieldCount = (int)marker_low;
                 return new PackStreamUnpackerResult(PackStreamType.Structure, fieldCount);

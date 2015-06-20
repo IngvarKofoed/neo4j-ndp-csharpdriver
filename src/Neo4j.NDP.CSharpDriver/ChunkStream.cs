@@ -23,7 +23,7 @@ namespace Neo4j.NDP.CSharpDriver
         private readonly IBitConverter bitConverter = new BigEndianTargetBitConverter();
         // TODO: Inject his
         private readonly MessageObjectSerializer serializer = new MessageObjectSerializer(
-            new PackSteamBuilderFactory(new BigEndianTargetBitConverter()));
+            new PackStreamPackerFactory(new BigEndianTargetBitConverter()));
         // TODO: Inject his
         private readonly MessageObjectDeserializer deserializer = 
             new MessageObjectDeserializer(new PackStreamUnpacker(new BigEndianTargetBitConverter()));
