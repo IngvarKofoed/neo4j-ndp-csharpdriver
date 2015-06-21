@@ -1,8 +1,11 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Neo4j.NDP.CSharpDriver.Serialization;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using Neo4j.NDP.CSharpDriver.Serialization;
+using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+
 
 namespace Neo4j.NDP.CSharpDriver.Test.Serialization
 {
@@ -169,6 +172,84 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
             Assert.IsNotNull(messageInt);
             Assert.AreEqual(MessageObjectType.Int, messageInt.Type);
             Assert.AreEqual(2, messageInt.Value);
+        }
+
+        [TestMethod]
+        public void DeserializeTextTest()
+        {
+            // Initialize
+            const string testText = "Test";
+            const int testTextLength = 4;
+            Mock<Stream> streamMock = new Mock<Stream>();
+            Stream stream = streamMock.Object;
+            Mock<IPackStreamUnpacker> unpacker = new Mock<IPackStreamUnpacker>();
+            unpacker.Setup(f => f.ReadNextType(stream)).Returns(new PackStreamUnpackerResult(PackStreamType.Text, testTextLength));
+            unpacker.Setup(f => f.ReadText(stream, testTextLength)).Returns(testText);
+            IMessageObjectDeserializer deserializer = new MessageObjectDeserializer(unpacker.Object);
+
+            // Run
+            IMessageText messageText = deserializer.Deserialize(stream) as IMessageText;
+
+            // Validate
+            Assert.IsNotNull(messageText);
+            Assert.AreEqual(MessageObjectType.Text, messageText.Type);
+            Assert.AreEqual(testText, messageText.Text);
+        }
+
+
+
+        [TestMethod]
+        public void DeserializeListTest()
+        {
+            // Initialize
+            Mock<Stream> streamMock = new Mock<Stream>();
+            Stream stream = streamMock.Object;
+            Mock<IPackStreamUnpacker> unpacker = new Mock<IPackStreamUnpacker>();
+            Queue<PackStreamUnpackerResult> multipleResults = new Queue<PackStreamUnpackerResult>(new []
+            {
+                new PackStreamUnpackerResult(PackStreamType.List, 1),
+                new PackStreamUnpackerResult(PackStreamType.Null)
+            });
+
+            unpacker.Setup(f => f.ReadNextType(stream)).Returns(() => multipleResults.Dequeue());
+            IMessageObjectDeserializer deserializer = new MessageObjectDeserializer(unpacker.Object);
+
+            // Run
+            IMessageList messageList = deserializer.Deserialize(stream) as IMessageList;
+
+            // Validate
+            Assert.IsNotNull(messageList);
+            Assert.AreEqual(MessageObjectType.List, messageList.Type);
+            Assert.AreEqual(1, messageList.Items.Count);
+            Assert.AreEqual(MessageObjectType.Null, messageList.Items[0].Type);
+        }
+
+        [TestMethod]
+        public void DeserializeMapTest()
+        {
+            // Initialize
+            Mock<Stream> streamMock = new Mock<Stream>();
+            Stream stream = streamMock.Object;
+            Mock<IPackStreamUnpacker> unpacker = new Mock<IPackStreamUnpacker>();
+            Queue<PackStreamUnpackerResult> multipleResults = new Queue<PackStreamUnpackerResult>(new[]
+            {
+                new PackStreamUnpackerResult(PackStreamType.Map, 1),
+                new PackStreamUnpackerResult(PackStreamType.Bool, true),
+                new PackStreamUnpackerResult(PackStreamType.Null)
+            });
+
+            unpacker.Setup(f => f.ReadNextType(stream)).Returns(() => multipleResults.Dequeue());
+            IMessageObjectDeserializer deserializer = new MessageObjectDeserializer(unpacker.Object);
+
+            // Run
+            IMessageMap messageMap = deserializer.Deserialize(stream) as IMessageMap;
+
+            // Validate
+            Assert.IsNotNull(messageMap);
+            Assert.AreEqual(MessageObjectType.Map, messageMap.Type);
+            Assert.AreEqual(1, messageMap.Map.Count);
+            Assert.AreEqual(MessageObjectType.Bool, messageMap.Map.Keys.First().Type);
+            Assert.AreEqual(MessageObjectType.Null, messageMap.Map.Values.First().Type);
         }
     }
 }
