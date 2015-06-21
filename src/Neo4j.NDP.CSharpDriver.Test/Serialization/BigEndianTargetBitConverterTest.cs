@@ -155,7 +155,17 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
 
             byte[] value = { 0x42, 0x27, 0x12, 0x34 };
             int result = converter.ToInt32(value);
-            Assert.AreEqual(1109856820, result);
+            Assert.AreEqual(0x42271234, result);
+        }
+
+        [TestMethod]
+        public void ConvertingToInt64Test()
+        {
+            var converter = new BigEndianTargetBitConverter();
+
+            byte[] value = { 0x42, 0x27, 0x12, 0x34, 0x98, 0x76, 0x54, 0x32 };
+            Int64 result = converter.ToInt64(value);
+            Assert.AreEqual(0x4227123498765432, result);
         }
 
         [TestMethod]
