@@ -28,15 +28,15 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
             byte marker_low = (byte)(marker & 0x0F);
             byte marker_high = (byte)(marker & 0xF0);
 
-            if (marker == PackStreamPacker.NullMarker)
+            if (marker == PackStreamConstants.NullMarker)
             {
                 return new PackStreamUnpackerResult(PackStreamType.Null);
             }
-            else if (marker == PackStreamPacker.FalseMarker)
+            else if (marker == PackStreamConstants.FalseMarker)
             {
                 return new PackStreamUnpackerResult(PackStreamType.Bool, false);
             }
-            else if (marker == PackStreamPacker.TrueMarker)
+            else if (marker == PackStreamConstants.TrueMarker)
             {
                 return new PackStreamUnpackerResult(PackStreamType.Bool, true);
             }
@@ -65,89 +65,89 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
             {
                 return new PackStreamUnpackerResult(PackStreamType.Integer64, 8);
             }
-            else if (marker_high == PackStreamPacker.Text4Marker)
+            else if (marker_high == PackStreamConstants.Text4Marker)
             {
                 int length = (int)marker_low;
                 return new PackStreamUnpackerResult(PackStreamType.Text, length);
             }
-            if (marker == PackStreamPacker.Text8Marker)
+            if (marker == PackStreamConstants.Text8Marker)
             {
                 int length = (int)stream.ReadByte();
                 return new PackStreamUnpackerResult(PackStreamType.Text, length);
             }
-            else if (marker == PackStreamPacker.Text16Marker)
+            else if (marker == PackStreamConstants.Text16Marker)
             {
                 byte[] lengthBytes = new byte[2];
                 stream.Read(lengthBytes);
                 int length = bitConverter.ToInt16(lengthBytes);
                 return new PackStreamUnpackerResult(PackStreamType.Text, length);
             }
-            else if (marker == PackStreamPacker.Text32Marker)
+            else if (marker == PackStreamConstants.Text32Marker)
             {
                 byte[] lengthBytes = new byte[4];
                 stream.Read(lengthBytes);
                 int length = bitConverter.ToInt32(lengthBytes);
                 return new PackStreamUnpackerResult(PackStreamType.Text, length);
             }
-            else if (marker_high == PackStreamPacker.List4Marker)
+            else if (marker_high == PackStreamConstants.List4Marker)
             {
                 int length = (int)marker_low;
                 return new PackStreamUnpackerResult(PackStreamType.List, length);
             }
-            else if (marker == PackStreamPacker.List8Marker)
+            else if (marker == PackStreamConstants.List8Marker)
             {
                 int length = stream.ReadByte();
                 return new PackStreamUnpackerResult(PackStreamType.List, length);
             }
-            else if (marker == PackStreamPacker.List16Marker)
+            else if (marker == PackStreamConstants.List16Marker)
             {
                 byte[] lengthBytes = new byte[2];
                 stream.Read(lengthBytes);
                 int length = bitConverter.ToInt16(lengthBytes);
                 return new PackStreamUnpackerResult(PackStreamType.List, length);
             }
-            else if (marker == PackStreamPacker.List32Marker)
+            else if (marker == PackStreamConstants.List32Marker)
             {
                 byte[] lengthBytes = new byte[4];
                 stream.Read(lengthBytes);
                 int length = bitConverter.ToInt32(lengthBytes);
                 return new PackStreamUnpackerResult(PackStreamType.List, length);
             }
-            else if (marker_high == PackStreamPacker.Map4Marker)
+            else if (marker_high == PackStreamConstants.Map4Marker)
             {
                 int mapCount = (int)marker_low;
                 return new PackStreamUnpackerResult(PackStreamType.Map, mapCount);
             }
-            else if (marker == PackStreamPacker.Map8Marker)
+            else if (marker == PackStreamConstants.Map8Marker)
             {
                 int length = stream.ReadByte();
                 return new PackStreamUnpackerResult(PackStreamType.Map, length);
             }
-            else if (marker == PackStreamPacker.Map16Marker)
+            else if (marker == PackStreamConstants.Map16Marker)
             {
                 byte[] lengthBytes = new byte[2];
                 stream.Read(lengthBytes);
                 int length = bitConverter.ToInt16(lengthBytes);
                 return new PackStreamUnpackerResult(PackStreamType.Map, length);
             }
-            else if (marker == PackStreamPacker.Map32Marker)
+            else if (marker == PackStreamConstants.Map32Marker)
             {
                 byte[] lengthBytes = new byte[4];
                 stream.Read(lengthBytes);
                 int length = bitConverter.ToInt32(lengthBytes);
                 return new PackStreamUnpackerResult(PackStreamType.Map, length);
             }
-            else if (marker_high == PackStreamPacker.Structure4Marker)
+            else if (marker_high == PackStreamConstants.Structure4Marker)
             {
                 int fieldCount = (int)marker_low;
                 return new PackStreamUnpackerResult(PackStreamType.Structure, fieldCount);
             }
-            else if (marker == PackStreamPacker.Structure8Marker)
+            else if (marker == PackStreamConstants.Structure8Marker)
             {
                 int length = stream.ReadByte();
                 return new PackStreamUnpackerResult(PackStreamType.Structure, length);
             }
-            else if (marker == PackStreamPacker.Structure16Marker)
+            else if (marker == PackStreamConstants.Structure16Marker)
             {
                 byte[] lengthBytes = new byte[2];
                 stream.Read(lengthBytes);
