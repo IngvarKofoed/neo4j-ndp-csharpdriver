@@ -39,7 +39,8 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
         public void DeserializeNullTest()
         {
             // Initialize
-            Stream stream = new FakeStream();
+            Mock<Stream> streamMock = new Mock<Stream>();
+            Stream stream = streamMock.Object;
             Mock<IPackStreamUnpacker> unpacker = new Mock<IPackStreamUnpacker>();
             unpacker.Setup(f => f.ReadNextType(stream)).Returns(new PackStreamUnpackerResult(PackStreamType.Null));
             IMessageObjectDeserializer deserializer = new MessageObjectDeserializer(unpacker.Object);
@@ -56,7 +57,8 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
         public void DeserializeBoolTest()
         {
             // Initialize
-            Stream stream = new FakeStream();
+            Mock<Stream> streamMock = new Mock<Stream>();
+            Stream stream = streamMock.Object;
             Mock<IPackStreamUnpacker> unpacker = new Mock<IPackStreamUnpacker>();
             unpacker.Setup(f => f.ReadNextType(stream)).Returns(new PackStreamUnpackerResult(PackStreamType.Bool, true));
             IMessageObjectDeserializer deserializer = new MessageObjectDeserializer(unpacker.Object);
@@ -74,7 +76,8 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
         public void DeserializeInt4Test()
         {
             // Initialize
-            Stream stream = new FakeStream();
+            Mock<Stream> streamMock = new Mock<Stream>();
+            Stream stream = streamMock.Object;
             Mock<IPackStreamUnpacker> unpacker = new Mock<IPackStreamUnpacker>();
             unpacker.Setup(f => f.ReadNextType(stream)).Returns(new PackStreamUnpackerResult(PackStreamType.Integer4, 2));
             IMessageObjectDeserializer deserializer = new MessageObjectDeserializer(unpacker.Object);
@@ -92,7 +95,8 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
         public void DeserializeInt8Test()
         {
             // Initialize
-            Stream stream = new FakeStream();
+            Mock<Stream> streamMock = new Mock<Stream>();
+            Stream stream = streamMock.Object;
             Mock<IPackStreamUnpacker> unpacker = new Mock<IPackStreamUnpacker>();
             unpacker.Setup(f => f.ReadNextType(stream)).Returns(new PackStreamUnpackerResult(PackStreamType.Integer8));
             unpacker.Setup(f => f.ReadInt8(stream)).Returns(2);
@@ -111,7 +115,8 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
         public void DeserializeInt16Test()
         {
             // Initialize
-            Stream stream = new FakeStream();
+            Mock<Stream> streamMock = new Mock<Stream>();
+            Stream stream = streamMock.Object;
             Mock<IPackStreamUnpacker> unpacker = new Mock<IPackStreamUnpacker>();
             unpacker.Setup(f => f.ReadNextType(stream)).Returns(new PackStreamUnpackerResult(PackStreamType.Integer16));
             unpacker.Setup(f => f.ReadInt16(stream)).Returns(2);
@@ -130,7 +135,8 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
         public void DeserializeInt32Test()
         {
             // Initialize
-            Stream stream = new FakeStream();
+            Mock<Stream> streamMock = new Mock<Stream>();
+            Stream stream = streamMock.Object;
             Mock<IPackStreamUnpacker> unpacker = new Mock<IPackStreamUnpacker>();
             unpacker.Setup(f => f.ReadNextType(stream)).Returns(new PackStreamUnpackerResult(PackStreamType.Integer32));
             unpacker.Setup(f => f.ReadInt32(stream)).Returns(2);
@@ -149,7 +155,8 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
         public void DeserializeInt64Test()
         {
             // Initialize
-            Stream stream = new FakeStream();
+            Mock<Stream> streamMock = new Mock<Stream>();
+            Stream stream = streamMock.Object;
             Mock<IPackStreamUnpacker> unpacker = new Mock<IPackStreamUnpacker>();
             unpacker.Setup(f => f.ReadNextType(stream)).Returns(new PackStreamUnpackerResult(PackStreamType.Integer64));
             unpacker.Setup(f => f.ReadInt64(stream)).Returns(2);
@@ -163,67 +170,5 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
             Assert.AreEqual(MessageObjectType.Int, messageInt.Type);
             Assert.AreEqual(2, messageInt.Value);
         }
-
-
-        public class FakeStream : Stream
-        {
-            public override bool CanRead
-            {
-                get { throw new NotImplementedException(); }
-            }
-
-            public override bool CanSeek
-            {
-                get { throw new NotImplementedException(); }
-            }
-
-            public override bool CanWrite
-            {
-                get { throw new NotImplementedException(); }
-            }
-
-            public override void Flush()
-            {
-                throw new NotImplementedException();
-            }
-
-            public override long Length
-            {
-                get { throw new NotImplementedException(); }
-            }
-
-            public override long Position
-            {
-                get
-                {
-                    throw new NotImplementedException();
-                }
-                set
-                {
-                    throw new NotImplementedException();
-                }
-            }
-
-            public override int Read(byte[] buffer, int offset, int count)
-            {
-                throw new NotImplementedException();
-            }
-
-            public override long Seek(long offset, SeekOrigin origin)
-            {
-                throw new NotImplementedException();
-            }
-
-            public override void SetLength(long value)
-            {
-                throw new NotImplementedException();
-            }
-
-            public override void Write(byte[] buffer, int offset, int count)
-            {
-                throw new NotImplementedException();
-            }
-        }
-
     }
 }
