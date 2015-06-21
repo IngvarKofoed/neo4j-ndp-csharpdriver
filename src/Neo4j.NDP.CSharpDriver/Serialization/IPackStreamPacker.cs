@@ -20,6 +20,12 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
         void Append(bool value);
 
         /// <summary>
+        /// Appends the given <paramref name="value"/> double value to the result byte array.
+        /// </summary>
+        /// <param name="value">The bool value to append.</param>
+        void Append(double value);
+
+        /// <summary>
         /// Appends the given <paramref name="value"/> value to the result byte array.
         /// </summary>
         /// <param name="value">The int value to append.</param>

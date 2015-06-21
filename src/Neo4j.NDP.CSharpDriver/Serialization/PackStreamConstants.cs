@@ -10,7 +10,7 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
         public const byte FalseMarker = 0xC2;
 
         // Floats (63bits)
-        // TODO: Add markers for floats
+        public const byte FloatMarker = 0xC1;
 
         // Integers markers and constants
         // Note: Int4 has no marker but has the raw value of [-16, 127] or in hex: 0xF0-0xFF and 0x00-0x7F

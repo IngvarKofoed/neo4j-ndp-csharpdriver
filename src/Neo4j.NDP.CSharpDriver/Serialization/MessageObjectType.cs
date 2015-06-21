@@ -8,10 +8,11 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
     {
         Null = 0,
         Bool = 1,
-        Int = 2,
-        Text = 3,
-        Map = 4,
-        List = 5,
-        Structure = 6
+        Double = 2,
+        Int = 3,
+        Text = 4,
+        Map = 5,
+        List = 6,
+        Structure = 7
     }
 }

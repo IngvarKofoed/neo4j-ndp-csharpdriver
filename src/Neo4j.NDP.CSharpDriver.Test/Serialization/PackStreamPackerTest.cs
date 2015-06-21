@@ -162,6 +162,27 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
         }
 
         [TestMethod]
+        public void DoubleTest()
+        {
+            // Initialize
+            const double testValue = 1.1;
+
+            Mock<IBitConverter> bitConverter = new Mock<IBitConverter>();
+            bitConverter.Setup(f => f.GetBytes(testValue)).Returns(new byte[] { 1 });
+            PackStreamPacker packer = new PackStreamPacker(bitConverter.Object);
+
+            // Run
+            packer.Append(testValue);
+            byte[] result = packer.GetBytes();
+
+            // Validate
+            Assert.IsNotNull(result);
+            Assert.AreEqual(2, result.Length);
+            Assert.AreEqual(0xC1, result[0]);
+            Assert.AreEqual(1, result[1]);
+        }
+
+        [TestMethod]
         public void Text4Test()
         {
             // Initialize
