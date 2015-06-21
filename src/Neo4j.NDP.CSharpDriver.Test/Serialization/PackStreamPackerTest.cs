@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Neo4j.NDP.CSharpDriver.Serialization;
+using System;
 
 namespace Neo4j.NDP.CSharpDriver.Test.Serialization
 {
@@ -8,7 +9,58 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
     public class PackStreamPackerTest
     {
         [TestMethod]
-        public void Text4BitTest()
+        public void NullTest()
+        {
+            // Initialize
+            Mock<IBitConverter> bitConverter = new Mock<IBitConverter>();
+            PackStreamPacker packer = new PackStreamPacker(bitConverter.Object);
+
+            // Run
+            packer.AppendNull();
+            byte[] result = packer.GetBytes();
+
+            // Validate
+            Assert.IsNotNull(result);
+            Assert.AreEqual(1, result.Length);
+            Assert.AreEqual(0xC0, result[0]);
+        }
+
+        [TestMethod]
+        public void TrueTest()
+        {
+            // Initialize
+            Mock<IBitConverter> bitConverter = new Mock<IBitConverter>();
+            PackStreamPacker packer = new PackStreamPacker(bitConverter.Object);
+
+            // Run
+            packer.Append(true);
+            byte[] result = packer.GetBytes();
+
+            // Validate
+            Assert.IsNotNull(result);
+            Assert.AreEqual(1, result.Length);
+            Assert.AreEqual(0xC3, result[0]);
+        }
+
+        [TestMethod]
+        public void FalseTest()
+        {
+            // Initialize
+            Mock<IBitConverter> bitConverter = new Mock<IBitConverter>();
+            PackStreamPacker packer = new PackStreamPacker(bitConverter.Object);
+
+            // Run
+            packer.Append(false);
+            byte[] result = packer.GetBytes();
+
+            // Validate
+            Assert.IsNotNull(result);
+            Assert.AreEqual(1, result.Length);
+            Assert.AreEqual(0xC2, result[0]);
+        }
+
+        [TestMethod]
+        public void Text4Test()
         {
             // Initialize
             const string testString = "Test";
@@ -31,7 +83,7 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
         }
 
         [TestMethod]
-        public void Text8BitTest()
+        public void Text8Test()
         {
             // Initialize
             const string testString = "Test";
@@ -63,7 +115,7 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
         }
 
         [TestMethod]
-        public void Text16BitTest()
+        public void Text16Test()
         {
             // Initialize
             const string testString = "Test";
@@ -95,7 +147,7 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
         }
 
         [TestMethod]
-        public void Text32BitTest()
+        public void Text32Test()
         {
             // Initialize
             const string testString = "Test";
@@ -127,7 +179,7 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
         }
 
         [TestMethod]
-        public void List4BitTest()
+        public void List4Test()
         {
             // Initialize
             Mock<IBitConverter> bitConverter = new Mock<IBitConverter>();
@@ -144,7 +196,7 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
         }
 
         [TestMethod]
-        public void List8BitTest()
+        public void List8Test()
         {
             // Initialize
             int length = 100;
@@ -164,7 +216,7 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
         }
 
         [TestMethod]
-        public void List16BitTest()
+        public void List16Test()
         {
             // Initialize
             int length = 300;
@@ -184,7 +236,7 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
         }
 
         [TestMethod]
-        public void List32BitTest()
+        public void List32Test()
         {
             // Initialize
             int length = 70000;
@@ -204,7 +256,7 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
         }
 
         [TestMethod]
-        public void Map4BitTest()
+        public void Map4Test()
         {
             // Initialize
             Mock<IBitConverter> bitConverter = new Mock<IBitConverter>();
@@ -221,7 +273,7 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
         }
 
         [TestMethod]
-        public void Map8BitTest()
+        public void Map8Test()
         {
             // Initialize
             int length = 100;
@@ -241,7 +293,7 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
         }
 
         [TestMethod]
-        public void Map16BitTest()
+        public void Map16Test()
         {
             // Initialize
             int length = 300;
@@ -261,7 +313,7 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
         }
 
         [TestMethod]
-        public void Map32BitTest()
+        public void Map32Test()
         {
             // Initialize
             int length = 70000;
@@ -280,10 +332,8 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
             Assert.AreEqual(0xAB, result[1]);
         }
 
-
-
         [TestMethod]
-        public void Structure4BitTest()
+        public void Structure4Test()
         {
             // Initialize
             Mock<IBitConverter> bitConverter = new Mock<IBitConverter>();
@@ -302,7 +352,7 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
         }
 
         [TestMethod]
-        public void Structure8BitTest()
+        public void Structure8Test()
         {
             // Initialize
             int length = 100;
@@ -344,23 +394,16 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
         }
 
         [TestMethod]
-        public void Structure32BitTest()
+        [ExpectedException(typeof(ArgumentException))]
+        public void Structure32Test()
         {
             // Initialize
             int length = 70000;
             Mock<IBitConverter> bitConverter = new Mock<IBitConverter>();
             PackStreamPacker packer = new PackStreamPacker(bitConverter.Object);
-            bitConverter.Setup(f => f.GetBytes((int)length)).Returns(new byte[] { 0xAB });
 
             // Run
-            packer.AppendMapHeader(length);
-            byte[] result = packer.GetBytes();
-
-            // Validate
-            Assert.IsNotNull(result);
-            Assert.AreEqual(2, result.Length);
-            Assert.AreEqual(0xDA, result[0]);
-            Assert.AreEqual(0xAB, result[1]);
+            packer.AppendStructureHeader(StructureSignature.Init, length);
         }
     }
 }

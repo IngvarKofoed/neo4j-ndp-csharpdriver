@@ -23,12 +23,35 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
         }
 
         /// <summary>
-        /// Appends the given <paramref name="text"/> UTF8 encoded, to the reulst byte array.
+        /// Appends an null value to the result byte array.
+        /// </summary>
+        public void AppendNull()
+        {
+            bytes.Add(PackStreamConstants.NullMarker);
+        }
+
+        /// <summary>
+        /// Appends the given <paramref name="value"/> bool balue to the result byte array.
+        /// </summary>
+        /// <param name="value">The bool value to append.</param>
+        public void Append(bool value)
+        {
+            if (value)
+            {
+                bytes.Add(PackStreamConstants.TrueMarker);
+            }
+            else
+            {
+                bytes.Add(PackStreamConstants.FalseMarker);
+            }
+        }
+
+        /// <summary>
+        /// Appends the given <paramref name="text"/> UTF8 encoded, to the result byte array.
         /// </summary>
         /// <param name="text">The text to append.</param>
         public void Append(string text)
         {
-            // TODO: Use the bit converter here
             byte[] textBytes = bitConverter.GetBytes(text);
 
             if (textBytes.Length <= 15)
