@@ -66,6 +66,7 @@
     <Compile Include="Serialization\MessageMap.cs" />
     <Compile Include="Serialization\MessageNull.cs" />
     <Compile Include="Serialization\MessageObjectDeserializer.cs" />
+    <Compile Include="Serialization\MessageObjectDeserializerExtensions.cs" />
     <Compile Include="Serialization\MessageObjectSerializer.cs" />
     <Compile Include="Serialization\MessageObjectType.cs" />
     <Compile Include="Serialization\IMessageText.cs" />

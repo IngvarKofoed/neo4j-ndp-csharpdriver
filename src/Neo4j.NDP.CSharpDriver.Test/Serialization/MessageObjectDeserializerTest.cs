@@ -14,6 +14,14 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
     {
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
+        public void DeserializeNullPackStreamUnpackerTest()
+        {
+            // Run
+            IMessageObjectDeserializer deserializer = new MessageObjectDeserializer(null);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
         public void DeserializeNullByteTest()
         {
             // Initialize
@@ -57,6 +65,21 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
         }
 
         [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void DeserializeBoolMissingValueTest()
+        {
+            // Initialize
+            Mock<Stream> streamMock = new Mock<Stream>();
+            Stream stream = streamMock.Object;
+            Mock<IPackStreamUnpacker> unpacker = new Mock<IPackStreamUnpacker>();
+            unpacker.Setup(f => f.ReadNextType(stream)).Returns(new PackStreamUnpackerResult(PackStreamType.Bool));
+            IMessageObjectDeserializer deserializer = new MessageObjectDeserializer(unpacker.Object);
+
+            // Run
+            deserializer.Deserialize(stream);
+        }
+
+        [TestMethod]
         public void DeserializeBoolTest()
         {
             // Initialize
@@ -73,6 +96,21 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
             Assert.IsNotNull(messageBool);
             Assert.AreEqual(MessageObjectType.Bool, messageBool.Type);
             Assert.AreEqual(true, messageBool.Value);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void DeserializeInt4MissingValueTest()
+        {
+            // Initialize
+            Mock<Stream> streamMock = new Mock<Stream>();
+            Stream stream = streamMock.Object;
+            Mock<IPackStreamUnpacker> unpacker = new Mock<IPackStreamUnpacker>();
+            unpacker.Setup(f => f.ReadNextType(stream)).Returns(new PackStreamUnpackerResult(PackStreamType.Integer4));
+            IMessageObjectDeserializer deserializer = new MessageObjectDeserializer(unpacker.Object);
+
+            // Run
+            deserializer.Deserialize(stream);
         }
 
         [TestMethod]
@@ -175,6 +213,21 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
         }
 
         [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void DeserializeTextMissingValueTest()
+        {
+            // Initialize
+            Mock<Stream> streamMock = new Mock<Stream>();
+            Stream stream = streamMock.Object;
+            Mock<IPackStreamUnpacker> unpacker = new Mock<IPackStreamUnpacker>();
+            unpacker.Setup(f => f.ReadNextType(stream)).Returns(new PackStreamUnpackerResult(PackStreamType.Text));
+            IMessageObjectDeserializer deserializer = new MessageObjectDeserializer(unpacker.Object);
+
+            // Run
+            deserializer.Deserialize(stream);
+        }
+
+        [TestMethod]
         public void DeserializeTextTest()
         {
             // Initialize
@@ -196,7 +249,42 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
             Assert.AreEqual(testText, messageText.Text);
         }
 
+        [TestMethod]
+        public void DeserializeZeroLengthTextTest()
+        {
+            // Initialize
+            const string testText = "";
+            const int testTextLength = 0;
+            Mock<Stream> streamMock = new Mock<Stream>();
+            Stream stream = streamMock.Object;
+            Mock<IPackStreamUnpacker> unpacker = new Mock<IPackStreamUnpacker>();
+            unpacker.Setup(f => f.ReadNextType(stream)).Returns(new PackStreamUnpackerResult(PackStreamType.Text, testTextLength));
+            unpacker.Setup(f => f.ReadText(stream, testTextLength)).Returns(testText);
+            IMessageObjectDeserializer deserializer = new MessageObjectDeserializer(unpacker.Object);
 
+            // Run
+            IMessageText messageText = deserializer.Deserialize(stream) as IMessageText;
+
+            // Validate
+            Assert.IsNotNull(messageText);
+            Assert.AreEqual(MessageObjectType.Text, messageText.Type);
+            Assert.AreEqual(testText, messageText.Text);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void DeserializeListMissingValueTest()
+        {
+            // Initialize
+            Mock<Stream> streamMock = new Mock<Stream>();
+            Stream stream = streamMock.Object;
+            Mock<IPackStreamUnpacker> unpacker = new Mock<IPackStreamUnpacker>();
+            unpacker.Setup(f => f.ReadNextType(stream)).Returns(new PackStreamUnpackerResult(PackStreamType.List));
+            IMessageObjectDeserializer deserializer = new MessageObjectDeserializer(unpacker.Object);
+
+            // Run
+            deserializer.Deserialize(stream);
+        }
 
         [TestMethod]
         public void DeserializeListTest()
@@ -225,6 +313,21 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
         }
 
         [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void DeserializeMapMissingValueTest()
+        {
+            // Initialize
+            Mock<Stream> streamMock = new Mock<Stream>();
+            Stream stream = streamMock.Object;
+            Mock<IPackStreamUnpacker> unpacker = new Mock<IPackStreamUnpacker>();
+            unpacker.Setup(f => f.ReadNextType(stream)).Returns(new PackStreamUnpackerResult(PackStreamType.Map));
+            IMessageObjectDeserializer deserializer = new MessageObjectDeserializer(unpacker.Object);
+
+            // Run
+            deserializer.Deserialize(stream);
+        }
+
+        [TestMethod]
         public void DeserializeMapTest()
         {
             // Initialize
@@ -250,6 +353,48 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
             Assert.AreEqual(1, messageMap.Map.Count);
             Assert.AreEqual(MessageObjectType.Bool, messageMap.Map.Keys.First().Type);
             Assert.AreEqual(MessageObjectType.Null, messageMap.Map.Values.First().Type);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void DeserializeStructureMissingValueTest()
+        {
+            // Initialize
+            Mock<Stream> streamMock = new Mock<Stream>();
+            Stream stream = streamMock.Object;
+            Mock<IPackStreamUnpacker> unpacker = new Mock<IPackStreamUnpacker>();
+            unpacker.Setup(f => f.ReadNextType(stream)).Returns(new PackStreamUnpackerResult(PackStreamType.Structure));
+            IMessageObjectDeserializer deserializer = new MessageObjectDeserializer(unpacker.Object);
+
+            // Run
+            deserializer.Deserialize(stream);
+        }
+
+        [TestMethod]
+        public void DeserializeStructureTest()
+        {
+            // Initialize
+            Mock<Stream> streamMock = new Mock<Stream>();
+            Stream stream = streamMock.Object;
+            Mock<IPackStreamUnpacker> unpacker = new Mock<IPackStreamUnpacker>();
+            Queue<PackStreamUnpackerResult> multipleResults = new Queue<PackStreamUnpackerResult>(new[]
+            {
+                new PackStreamUnpackerResult(PackStreamType.Structure, 1),
+                new PackStreamUnpackerResult(PackStreamType.Bool, true)
+            });
+            unpacker.Setup(f => f.ReadNextType(stream)).Returns(() => multipleResults.Dequeue());
+            unpacker.Setup(f => f.ReadStructureSignature(stream)).Returns(StructureSignature.Init);
+            IMessageObjectDeserializer deserializer = new MessageObjectDeserializer(unpacker.Object);
+
+            // Run
+            IMessageStructure messageStructure = deserializer.Deserialize(stream) as IMessageStructure;
+
+            // Validate
+            Assert.IsNotNull(messageStructure);
+            Assert.AreEqual(MessageObjectType.Structure, messageStructure.Type);
+            Assert.AreEqual(StructureSignature.Init, messageStructure.Signature);
+            Assert.AreEqual(1, messageStructure.Fields.Count);
+            Assert.AreEqual(MessageObjectType.Bool, messageStructure.Fields[0].Type);
         }
     }
 }

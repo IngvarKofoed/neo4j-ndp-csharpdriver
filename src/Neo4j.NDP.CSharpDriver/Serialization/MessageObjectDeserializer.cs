@@ -21,18 +21,6 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
         }
 
         /// <summary>
-        /// Deserializes the given <paramref name="data"/> bytes in the PackStream format to a <see cref="IMessageObject"/> tree.
-        /// </summary>
-        /// <param name="data">The bytes to deserialize from.</param>
-        public IMessageObject Deserialize(byte[] data)
-        {
-            using (MemoryStream stream = new MemoryStream(data))
-            {
-                return Deserialize(stream);
-            }
-        }
-
-        /// <summary>
         /// Deserializes the given <paramref name="stream"/> by reading bytes in the PackStream format to a <see cref="IMessageObject"/> tree.
         /// </summary>
         /// <param name="stream">The stream to read the to deserialize bytes from.</param>
