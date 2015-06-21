@@ -1,6 +1,6 @@
-﻿using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Neo4j.NDP.CSharpDriver.Serialization;
+using System;
 
 namespace Neo4j.NDP.CSharpDriver.Test.Serialization
 {
@@ -78,6 +78,26 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
             Assert.AreEqual(0x27, result[1]);
             Assert.AreEqual(0x12, result[2]);
             Assert.AreEqual(0x34, result[3]);
+        }
+
+        [TestMethod]
+        public void ConvertingFromInt64Test()
+        {
+            var converter = new BigEndianTargetBitConverter();
+
+            Int64 value = 0x4227123498765432;
+            byte[] result = converter.GetBytes(value);
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual(8, result.Length);
+            Assert.AreEqual(0x42, result[0]);
+            Assert.AreEqual(0x27, result[1]);
+            Assert.AreEqual(0x12, result[2]);
+            Assert.AreEqual(0x34, result[3]);
+            Assert.AreEqual(0x98, result[4]);
+            Assert.AreEqual(0x76, result[5]);
+            Assert.AreEqual(0x54, result[6]);
+            Assert.AreEqual(0x32, result[7]);
         }
 
         [TestMethod]

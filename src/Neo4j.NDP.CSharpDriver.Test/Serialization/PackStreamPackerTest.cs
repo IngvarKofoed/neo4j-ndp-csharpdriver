@@ -60,6 +60,108 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
         }
 
         [TestMethod]
+        public void Int4Test()
+        {
+            // Initialize
+            const int testValue = 16;
+
+            Mock<IBitConverter> bitConverter = new Mock<IBitConverter>();
+            PackStreamPacker packer = new PackStreamPacker(bitConverter.Object);
+
+            // Run
+            packer.Append(testValue);
+            byte[] result = packer.GetBytes();
+
+            // Validate
+            Assert.IsNotNull(result);
+            Assert.AreEqual(1, result.Length);
+            Assert.AreEqual(0x10, result[0]);
+        }
+
+        [TestMethod]
+        public void Int8Test()
+        {
+            // Initialize
+            const int testValue = -100;
+
+            Mock<IBitConverter> bitConverter = new Mock<IBitConverter>();
+            PackStreamPacker packer = new PackStreamPacker(bitConverter.Object);
+
+            // Run
+            packer.Append(testValue);
+            byte[] result = packer.GetBytes();
+
+            // Validate
+            Assert.IsNotNull(result);
+            Assert.AreEqual(2, result.Length);
+            Assert.AreEqual(0xC8, result[0]);
+            Assert.AreEqual(256 + testValue, result[1]);
+        }
+
+        [TestMethod]
+        public void Int16Test()
+        {
+            // Initialize
+            const int testValue = 1234;
+
+            Mock<IBitConverter> bitConverter = new Mock<IBitConverter>();
+            bitConverter.Setup(f => f.GetBytes((short)testValue)).Returns(new byte[] { 1 });
+            PackStreamPacker packer = new PackStreamPacker(bitConverter.Object);
+
+            // Run
+            packer.Append(testValue);
+            byte[] result = packer.GetBytes();
+
+            // Validate
+            Assert.IsNotNull(result);
+            Assert.AreEqual(2, result.Length);
+            Assert.AreEqual(0xC9, result[0]);
+            Assert.AreEqual(1, result[1]);
+        }
+
+        [TestMethod]
+        public void Int32Test()
+        {
+            // Initialize
+            const int testValue = 70000;
+
+            Mock<IBitConverter> bitConverter = new Mock<IBitConverter>();
+            bitConverter.Setup(f => f.GetBytes(testValue)).Returns(new byte[] { 1 });
+            PackStreamPacker packer = new PackStreamPacker(bitConverter.Object);
+
+            // Run
+            packer.Append(testValue);
+            byte[] result = packer.GetBytes();
+
+            // Validate
+            Assert.IsNotNull(result);
+            Assert.AreEqual(2, result.Length);
+            Assert.AreEqual(0xCA, result[0]);
+            Assert.AreEqual(1, result[1]);
+        }
+
+        [TestMethod]
+        public void Int64Test()
+        {
+            // Initialize
+            const Int64 testValue = 3000000000;
+
+            Mock<IBitConverter> bitConverter = new Mock<IBitConverter>();
+            bitConverter.Setup(f => f.GetBytes(testValue)).Returns(new byte[] { 1 });
+            PackStreamPacker packer = new PackStreamPacker(bitConverter.Object);
+
+            // Run
+            packer.Append(testValue);
+            byte[] result = packer.GetBytes();
+
+            // Validate
+            Assert.IsNotNull(result);
+            Assert.AreEqual(2, result.Length);
+            Assert.AreEqual(0xCB, result[0]);
+            Assert.AreEqual(1, result[1]);
+        }
+
+        [TestMethod]
         public void Text4Test()
         {
             // Initialize

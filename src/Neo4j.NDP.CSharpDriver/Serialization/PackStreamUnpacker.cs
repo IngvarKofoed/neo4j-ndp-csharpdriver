@@ -40,12 +40,12 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
             {
                 return new PackStreamUnpackerResult(PackStreamType.Bool, true);
             }
-            else if (PackStreamConstants.Int4Min <= marker)
+            else if (PackStreamConstants.Int4MinByte <= marker)
             {
                 // Note that Int4Min is calculated like this 256 + PackStreamConstants.Int4Min which is a large byte value
                 return new PackStreamUnpackerResult(PackStreamType.Integer4, (int)marker - 256);
             }
-            else if (marker <= PackStreamConstants.Int4Max)
+            else if (marker <= PackStreamConstants.Int4MaxByte)
             {
                 return new PackStreamUnpackerResult(PackStreamType.Integer4, (int)marker);
             }

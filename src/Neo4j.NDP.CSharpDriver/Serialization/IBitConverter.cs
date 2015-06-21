@@ -44,6 +44,13 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
         byte[] GetBytes(uint value);
 
         /// <summary>
+        /// Converts an int (Int64) to bytes.
+        /// </summary>
+        /// <param name="value">The int (Int64) value to convert.</param>
+        /// <returns>The specified int (Int64) value as an array of bytes.</returns>
+        byte[] GetBytes(Int64 value);
+
+        /// <summary>
         /// Converts an string to bytes.
         /// </summary>
         /// <param name="value">The string value to convert.</param>

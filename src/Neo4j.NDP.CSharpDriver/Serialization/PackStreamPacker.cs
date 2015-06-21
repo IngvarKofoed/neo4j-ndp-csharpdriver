@@ -47,6 +47,38 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
         }
 
         /// <summary>
+        /// Appends the given <paramref name="value"/> value to the result byte array.
+        /// </summary>
+        /// <param name="value">The int value to append.</param>
+        public void Append(Int64 value)
+        {
+            if (PackStreamConstants.Int4Min <= value && value <= PackStreamConstants.Int4Max)
+            {
+                bytes.Add((byte)value);
+            }
+            else if (PackStreamConstants.Int8Min <= value && value <= PackStreamConstants.Int8Max)
+            {
+                bytes.Add(PackStreamConstants.Int8Marker);
+                bytes.Add((byte)value);
+            }
+            else if (PackStreamConstants.Int16Min <= value && value <= PackStreamConstants.Int16Max)
+            {
+                bytes.Add(PackStreamConstants.Int16Marker);
+                bytes.AddRange(bitConverter.GetBytes((short)value));
+            }
+            else if (PackStreamConstants.Int32Min <= value && value <= PackStreamConstants.Int32Max)
+            {
+                bytes.Add(PackStreamConstants.Int32Marker);
+                bytes.AddRange(bitConverter.GetBytes((int)value));
+            }
+            else if (PackStreamConstants.Int64Min <= value && value <= PackStreamConstants.Int64Max)
+            {
+                bytes.Add(PackStreamConstants.Int64Marker);
+                bytes.AddRange(bitConverter.GetBytes(value));
+            }
+        }
+
+        /// <summary>
         /// Appends the given <paramref name="text"/> UTF8 encoded, to the result byte array.
         /// </summary>
         /// <param name="text">The text to append.</param>

@@ -14,10 +14,16 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
         void AppendNull();
 
         /// <summary>
-        /// Appends the given <paramref name="value"/> bool balue to the result byte array.
+        /// Appends the given <paramref name="value"/> bool value to the result byte array.
         /// </summary>
         /// <param name="value">The bool value to append.</param>
         void Append(bool value);
+
+        /// <summary>
+        /// Appends the given <paramref name="value"/> value to the result byte array.
+        /// </summary>
+        /// <param name="value">The int value to append.</param>
+        void Append(Int64 value);
 
         /// <summary>
         /// Appends the given <paramref name="text"/> UTF8 encoded, to the result byte array.

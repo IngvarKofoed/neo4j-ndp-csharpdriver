@@ -1,4 +1,5 @@
 ﻿
+using System;
 namespace Neo4j.NDP.CSharpDriver.Serialization
 {
     public static class PackStreamConstants
@@ -18,8 +19,19 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
         public const byte Int32Marker = 0xCA;
         public const byte Int64Marker = 0xCB;
 
-        public const byte Int4Min = (byte)(256 - 16);
-        public const byte Int4Max = (byte)127;
+        public const byte Int4MinByte = (byte)(256 - 16);
+        public const byte Int4MaxByte = (byte)127;
+        public const Int64 Int4Min = -16;
+        public const Int64 Int4Max = 127;
+        public const Int64 Int8Min = -128;
+        public const Int64 Int8Max = -17;
+        public const Int64 Int16Min = -32768;
+        public const Int64 Int16Max = 32767;
+        public const Int64 Int32Min = -2147483648;
+        public const Int64 Int32Max = 2147483647;
+        public const Int64 Int64Min = -9223372036854775808;
+        public const Int64 Int64Max = 9223372036854775807;
+
 
         // Text
         public const byte Text4Marker = 0x80;
