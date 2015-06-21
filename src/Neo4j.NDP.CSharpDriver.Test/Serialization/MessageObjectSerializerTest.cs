@@ -77,6 +77,30 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
         }
 
         [TestMethod]
+        public void MessageIntTest()
+        {
+            // Initialie
+            const int testValue = 100;
+            byte[] testBytes = new byte[] { 0xAB };
+            Mock<IPackStreamPacker> packer = new Mock<IPackStreamPacker>();
+            packer.Setup(f => f.GetBytes()).Returns(testBytes);
+            Mock<IPackStreamPackerFactory> factory = new Mock<IPackStreamPackerFactory>();
+            factory.Setup(f => f.Create()).Returns(packer.Object);
+
+            IMessageObjectSerializer serializer = new MessageObjectSerializer(factory.Object);
+            IMessageInt messageText = new MessageInt(testValue);
+
+            // Run
+            byte[] result = serializer.Serialize(messageText);
+
+            // Validate
+            packer.Verify(f => f.Append((byte)testValue));
+            Assert.IsNotNull(result);
+            Assert.AreEqual(1, result.Length);
+            Assert.AreEqual(testBytes[0], result[0]);
+        }
+
+        [TestMethod]
         public void MessageTextTest()
         {
             // Initialie
