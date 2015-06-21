@@ -50,7 +50,6 @@ Relationship: rel/3, node/6-KNOWS->node/7 {from:Home}
 ```
 
 ## TODO list
-* Support for ints and floats as values in PackStream
 * Parameters support when running queries
 * Support for Paths
 * Support of other return values than node and relationships (see next point)
