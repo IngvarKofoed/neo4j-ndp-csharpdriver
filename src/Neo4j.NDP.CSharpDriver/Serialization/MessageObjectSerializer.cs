@@ -6,7 +6,7 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
     /// <summary>
     /// Serializes <see cref="IMessageObject"/> trees into bytes in the PackStream format.
     /// </summary>
-    public class MessageObjectSerializer
+    public class MessageObjectSerializer : IMessageObjectSerializer
     {
         private readonly IPackStreamPackerFactory packSteamPackerFactory;
 
@@ -35,6 +35,14 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
         {
             switch (messageObject.Type)
             {
+                case MessageObjectType.Null:
+                    Serialize((IMessageNull)messageObject, builder);
+                    break;
+
+                case MessageObjectType.Bool:
+                    Serialize((IMessageBool)messageObject, builder);
+                    break;
+
                 case MessageObjectType.Text:
                     Serialize((IMessageText)messageObject, builder);
                     break;
@@ -54,6 +62,16 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
                 default:
                     throw new NotImplementedException();
             }
+        }
+
+        private void Serialize(IMessageNull messageNull, IPackStreamPacker builder)
+        {
+            builder.AppendNull();
+        }
+
+        private void Serialize(IMessageBool messageNull, IPackStreamPacker builder)
+        {
+            builder.Append(messageNull.Value);
         }
 
         private void Serialize(IMessageText messageText, IPackStreamPacker builder)

@@ -15,7 +15,7 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
         public void NullFactoryArgumentTest()
         {
             // Run
-            MessageObjectSerializer serializer = new MessageObjectSerializer(null);
+            IMessageObjectSerializer serializer = new MessageObjectSerializer(null);
         }
 
         [TestMethod]
@@ -24,10 +24,56 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
         {
             // Initialie
             Mock<IPackStreamPackerFactory> factory = new Mock<IPackStreamPackerFactory>();
-            MessageObjectSerializer serializer = new MessageObjectSerializer(factory.Object);
+            IMessageObjectSerializer serializer = new MessageObjectSerializer(factory.Object);
 
             // Run
             serializer.Serialize(null);
+        }
+
+        [TestMethod]
+        public void MessageNullTest()
+        {
+            // Initialie
+            byte[] testBytes = new byte[] { 0xAB };
+            Mock<IPackStreamPacker> packer = new Mock<IPackStreamPacker>();
+            packer.Setup(f => f.GetBytes()).Returns(testBytes);
+            Mock<IPackStreamPackerFactory> factory = new Mock<IPackStreamPackerFactory>();
+            factory.Setup(f => f.Create()).Returns(packer.Object);
+
+            IMessageObjectSerializer serializer = new MessageObjectSerializer(factory.Object);
+            IMessageNull messageText = new MessageNull();
+
+            // Run
+            byte[] result = serializer.Serialize(messageText);
+
+            // Validate
+            packer.Verify(f => f.AppendNull());
+            Assert.IsNotNull(result);
+            Assert.AreEqual(1, result.Length);
+            Assert.AreEqual(testBytes[0], result[0]);
+        }
+
+        [TestMethod]
+        public void MessageBoolTest()
+        {
+            // Initialie
+            byte[] testBytes = new byte[] { 0xAB };
+            Mock<IPackStreamPacker> packer = new Mock<IPackStreamPacker>();
+            packer.Setup(f => f.GetBytes()).Returns(testBytes);
+            Mock<IPackStreamPackerFactory> factory = new Mock<IPackStreamPackerFactory>();
+            factory.Setup(f => f.Create()).Returns(packer.Object);
+
+            IMessageObjectSerializer serializer = new MessageObjectSerializer(factory.Object);
+            IMessageBool messageText = new MessageBool(false);
+
+            // Run
+            byte[] result = serializer.Serialize(messageText);
+
+            // Validate
+            packer.Verify(f => f.Append(false));
+            Assert.IsNotNull(result);
+            Assert.AreEqual(1, result.Length);
+            Assert.AreEqual(testBytes[0], result[0]);
         }
 
         [TestMethod]
@@ -41,8 +87,8 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
             Mock<IPackStreamPackerFactory> factory = new Mock<IPackStreamPackerFactory>();
             factory.Setup(f => f.Create()).Returns(packer.Object);
 
-            MessageObjectSerializer serializer = new MessageObjectSerializer(factory.Object);
-            MessageText messageText = new MessageText(testString);
+            IMessageObjectSerializer serializer = new MessageObjectSerializer(factory.Object);
+            IMessageText messageText = new MessageText(testString);
 
             // Run
             byte[] result = serializer.Serialize(messageText);
@@ -65,8 +111,8 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
             Mock<IPackStreamPackerFactory> factory = new Mock<IPackStreamPackerFactory>();
             factory.Setup(f => f.Create()).Returns(packer.Object);
 
-            MessageObjectSerializer serializer = new MessageObjectSerializer(factory.Object);
-            MessageList messageList = new MessageList(new MessageText(testString));
+            IMessageObjectSerializer serializer = new MessageObjectSerializer(factory.Object);
+            IMessageList messageList = new MessageList(new MessageText(testString));
 
             // Run
             byte[] result = serializer.Serialize(messageList);
@@ -91,8 +137,8 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
             Mock<IPackStreamPackerFactory> factory = new Mock<IPackStreamPackerFactory>();
             factory.Setup(f => f.Create()).Returns(packer.Object);
 
-            MessageObjectSerializer serializer = new MessageObjectSerializer(factory.Object);
-            MessageMap messageMap = new MessageMap(
+            IMessageObjectSerializer serializer = new MessageObjectSerializer(factory.Object);
+            IMessageMap messageMap = new MessageMap(
                 new Dictionary<IMessageObject, IMessageObject> {
                     { new MessageText(testString1), new MessageText(testString2) }
             });
@@ -120,8 +166,8 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
             Mock<IPackStreamPackerFactory> factory = new Mock<IPackStreamPackerFactory>();
             factory.Setup(f => f.Create()).Returns(packer.Object);
 
-            MessageObjectSerializer serializer = new MessageObjectSerializer(factory.Object);
-            MessageStructure messageStructure = new MessageStructure(
+            IMessageObjectSerializer serializer = new MessageObjectSerializer(factory.Object);
+            IMessageStructure messageStructure = new MessageStructure(
                 StructureSignature.Init, 
                 new MessageText(testString));
 

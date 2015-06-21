@@ -58,6 +58,7 @@
     <Compile Include="Serialization\IMessageNull.cs" />
     <Compile Include="Serialization\IMessageObject.cs" />
     <Compile Include="Serialization\IMessageObjectDeserializer.cs" />
+    <Compile Include="Serialization\IMessageObjectSerializer.cs" />
     <Compile Include="Serialization\IMessageStructure.cs" />
     <Compile Include="Serialization\LittleEndianTargetBitConverter.cs" />
     <Compile Include="Serialization\MessageInt.cs" />
