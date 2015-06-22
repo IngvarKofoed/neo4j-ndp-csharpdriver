@@ -35,14 +35,18 @@ namespace Neo4j.NDP.CSharpDriver
             logger.Info("Initialization was successful");
         }
 
-        public IEnumerable<IEntity> Run(string statement)
+        public IEnumerable<IEntity> Run(string statement, IDictionary<string, object> parameters = null)
         {
             logger.Info("Running statement: {0}", statement);
+
+            IMessageMap parametersMessage = BuildParameters(parameters);
+
             IMessageStructure runRequest = new MessageStructure(
                 StructureSignature.Run, new IMessageObject[] {
 					new MessageText(statement),
-					new MessageMap() // TODO: Put parameters here
+                    parametersMessage 
 		    });
+
             chunkStream.Write(runRequest);
 
             IMessageStructure pullAllRequest = new MessageStructure(
@@ -96,6 +100,43 @@ namespace Neo4j.NDP.CSharpDriver
             logger.Info("Finished with the run");
            
             yield break;
+        }
+
+        private IMessageMap BuildParameters(IDictionary<string, object> parameters)
+        {
+            if (parameters == null) 
+            {
+                return new MessageMap();
+            }
+
+            IDictionary<IMessageObject, IMessageObject> maps = new Dictionary<IMessageObject, IMessageObject>();
+
+            foreach (var kvp in parameters)
+            {
+                IMessageObject key = new MessageText(kvp.Key);
+
+                IMessageObject value;
+                if (kvp.Value == null)
+                {
+                    value = new MessageNull();
+                }
+                else if (kvp.Value.GetType() == typeof(int))
+                {
+                    value = new MessageInt((int)kvp.Value);
+                }
+                else if (kvp.Value.GetType() == typeof(string))
+                {
+                    value = new MessageText((string)kvp.Value);
+                }
+                else 
+                {
+                    throw new NotImplementedException();
+                }
+
+                maps.Add(key, value);
+            }
+            
+            return new MessageMap(maps);
         }
 
         public void Dispose()
