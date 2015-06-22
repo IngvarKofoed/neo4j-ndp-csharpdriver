@@ -50,7 +50,6 @@ Relationship: rel/3, node/6-KNOWS->node/7 {from:Home}
 ```
 
 ## TODO list
-* Parameters support when running queries
 * Support for Paths
 * Support of other return values than node and relationships (see next point)
 * Better generic typed way of getting the results of a Run
