@@ -50,9 +50,22 @@ Relationship: rel/3, node/6-KNOWS->node/7 {from:Home}
 ```
 
 ## TODO list
+* Better generic typed way of getting the results of a Run. See example code below:
+```C#
+// Example: Without having to create new types
+var result = connection.Strict<Tuple<INode, string>>("MATCH (n) RETURN n, n.name")
+// Example: With custom type and factory delegate
+var result = connection.Strict<MyClass>("MATCH (n) RETURN n, n.name", (p1, p2) => new MyClass(p1, p2))
+// Example: With custom type with constructor with matching arguments
+var result = connection.Strict<MyClass>("MATCH (n) RETURN n, n.name")
+
+class MyClass
+{
+    MyClass(INode node, string name) {}
+    // Properties etc...
+}
+```
 * Support for Paths
-* Support of other return values than node and relationships (see next point)
-* Better generic typed way of getting the results of a Run
 * More unittests
 * More documentation
-* And lits of minor things
+* And lots of minor things
