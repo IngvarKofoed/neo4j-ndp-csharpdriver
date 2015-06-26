@@ -114,6 +114,24 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
         }
 
         [TestMethod]
+        public void DeserializeDoubleTest()
+        {
+            // Initialize
+            Mock<Stream> streamMock = new Mock<Stream>();
+            Stream stream = streamMock.Object;
+            Mock<IPackStreamUnpacker> unpacker = new Mock<IPackStreamUnpacker>();
+            unpacker.Setup(f => f.ReadNextType(stream)).Returns(new PackStreamUnpackerResult(PackStreamType.Double));
+            IMessageObjectDeserializer deserializer = new MessageObjectDeserializer(unpacker.Object);
+
+            // Run
+            IMessageDouble messageDouble = deserializer.Deserialize(stream) as IMessageDouble;
+
+            // Validate
+            Assert.IsNotNull(messageDouble);
+            Assert.AreEqual(MessageObjectType.Double, messageDouble.Type);
+        }
+
+        [TestMethod]
         public void DeserializeInt4Test()
         {
             // Initialize

@@ -5,6 +5,9 @@ using Neo4j.NDP.CSharpDriver.Extensions;
 
 namespace Neo4j.NDP.CSharpDriver.Serialization
 {
+    /// <summary>
+    /// Reads higher level types from a PackStream.
+    /// </summary>
     public class PackStreamUnpacker : IPackStreamUnpacker
     {
         private readonly IBitConverter bitConverter;
@@ -20,6 +23,11 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
             this.bitConverter = bitConverter;
         }
 
+        /// <summary>
+        /// Reads the next type (one byte) from the given <paramref name="stream"/>.
+        /// </summary>
+        /// <returns>Returns the next type and in some cases (bools, null and tiny) the value is also returned.</returns>
+        /// <param name="stream">The stream to read the next type from.</param>
         public PackStreamUnpackerResult ReadNextType(Stream stream)
         {
             if (stream == null) throw new ArgumentNullException("stream");
@@ -39,6 +47,10 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
             else if (marker == PackStreamConstants.TrueMarker)
             {
                 return new PackStreamUnpackerResult(PackStreamType.Bool, true);
+            }
+            else if (marker == PackStreamConstants.FloatMarker)
+            {
+                return new PackStreamUnpackerResult(PackStreamType.Double);
             }
             else if (PackStreamConstants.Int4MinByte <= marker)
             {
@@ -160,6 +172,11 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
             }
         }
 
+        /// <summary>
+        /// Reads the next 8 bit signed integer from the given <paramref name="stream"/>.
+        /// </summary>
+        /// <param name="steam">The stream to read the 8 bit signed integer from.</param>
+        /// <returns>The read 8 bit signed integer.</returns>
         public int ReadInt8(Stream stream)
         {
             if (stream == null) throw new ArgumentNullException("stream");
@@ -168,6 +185,11 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
             return value - 256;
         }
 
+        /// <summary>
+        /// Reads the next 16 bit signed integer from the given <paramref name="stream"/>.
+        /// </summary>
+        /// <param name="steam">The stream to read the 16 bit signed integer from.</param>
+        /// <returns>The read 16 bit signed integer.</returns>
         public int ReadInt16(Stream stream)
         {
             if (stream == null) throw new ArgumentNullException("stream");
@@ -177,6 +199,11 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
             return bitConverter.ToInt16(data);
         }
 
+        /// <summary>
+        /// Reads the next 32 bit signed integer from the given <paramref name="stream"/>.
+        /// </summary>
+        /// <param name="steam">The stream to read the 32 bit signed integer from.</param>
+        /// <returns>The read 32 bit signed integer.</returns>
         public int ReadInt32(Stream stream)
         {
             if (stream == null) throw new ArgumentNullException("stream");
@@ -186,6 +213,11 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
             return bitConverter.ToInt32(data);
         }
 
+        /// <summary>
+        /// Reads the next 64 bit signed integer from the given <paramref name="stream"/>.
+        /// </summary>
+        /// <param name="steam">The stream to read the 64 bit signed integer from.</param>
+        /// <returns>The read 64 bit signed integer.</returns>
         public Int64 ReadInt64(Stream stream)
         {
             if (stream == null) throw new ArgumentNullException("stream");
@@ -195,6 +227,26 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
             return bitConverter.ToInt64(data);
         }
 
+        /// <summary>
+        /// Reads the next double from the given <paramref name="stream"/>.
+        /// </summary>
+        /// <param name="steam">The stream to read the double from.</param>
+        /// <returns>The read double.</returns>
+        public double ReadDouble(Stream stream)
+        {
+            if (stream == null) throw new ArgumentNullException("stream");
+
+            byte[] data = new byte[8];
+            stream.Read(data);
+            return bitConverter.ToDouble(data);
+        }
+
+        /// <summary>
+        /// Reads a text with the given <paramref name="length"/> from the given <paramref name="stream"/>.
+        /// </summary>
+        /// <returns>Returns the read text.</returns>
+        /// <param name="stream">The stream to read the text from.</param>
+        /// <param name="length">The length of the text to read.</param>
         public string ReadText(Stream stream, int length)
         {
             if (stream == null) throw new ArgumentNullException("stream");
@@ -206,6 +258,11 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
             return text;
         }
 
+        /// <summary>
+        /// Reads the structure signature from the given <paramref name="stream"/>.
+        /// </summary>
+        /// <returns>Returns the read structure signature.</returns>
+        /// <param name="stream">The stream to read the structure signature from.</param>
         public StructureSignature ReadStructureSignature(Stream stream)
         {
             if (stream == null) throw new ArgumentNullException("stream");

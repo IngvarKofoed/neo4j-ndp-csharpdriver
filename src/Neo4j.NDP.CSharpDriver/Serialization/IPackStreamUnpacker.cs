@@ -44,6 +44,13 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
         Int64 ReadInt64(Stream steam);
 
         /// <summary>
+        /// Reads the next double from the given <paramref name="stream"/>.
+        /// </summary>
+        /// <param name="steam">The stream to read the double from.</param>
+        /// <returns>The read double.</returns>
+        double ReadDouble(Stream steam);
+
+        /// <summary>
         /// Reads a text with the given <paramref name="length"/> from the given <paramref name="stream"/>.
         /// </summary>
         /// <returns>Returns the read text.</returns>

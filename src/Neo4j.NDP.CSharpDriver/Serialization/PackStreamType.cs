@@ -7,6 +7,7 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
         Null,
         Bool,
 
+        Double, 
         /// <summary>
         /// 4 bit integer, the value is embedded in the 'marker'
         /// </summary>

@@ -38,6 +38,9 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
                     if (!type.BoolValue.HasValue) throw new InvalidOperationException("Expected bool value");
                     return new MessageBool(type.BoolValue.Value);
 
+                case PackStreamType.Double:
+                    return DeserializeDouble(stream);
+
                 case PackStreamType.Integer4:
                     if (!type.IntValue.HasValue) throw new InvalidOperationException("Expected length for int");
                     return new MessageInt(type.IntValue.Value);
@@ -73,6 +76,12 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
                 default:
                     throw new NotImplementedException("Unhandled pack stream type: " + type);
             }
+        }
+
+        private MessageDouble DeserializeDouble(Stream stream)
+        {
+            double value = packStreamUnpacker.ReadDouble(stream);
+            return new MessageDouble(value);
         }
 
         private IMessageInt DeserializeInt8(Stream stream)
