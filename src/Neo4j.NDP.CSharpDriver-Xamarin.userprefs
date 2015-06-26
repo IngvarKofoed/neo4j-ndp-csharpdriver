@@ -1,18 +1,26 @@
 ﻿<Properties StartupItem="TestConsole/TestConsole.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="../../CSharpDriverSpike/CSharpDriverSpike/Program.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Neo4j.NDP.CSharpDriver/Serialization/MessageObjectDeserializer.cs">
     <Files>
-      <File FileName="Neo4j.NDP.CSharpDriver/Serialization/BitConverterBase.cs" Line="1" Column="1" />
-      <File FileName="Neo4j.NDP.CSharpDriver/Serialization/IBitConverter.cs" Line="1" Column="1" />
-      <File FileName="../../CSharpDriverSpike/CSharpDriverSpike/Program.cs" Line="232" Column="18" />
+      <File FileName="Neo4j.NDP.CSharpDriver/Serialization/BigEndianTargetBitConverter.cs" Line="4" Column="33" />
+      <File FileName="Neo4j.NDP.CSharpDriver/Serialization/ChunkStream.cs" Line="8" Column="47" />
+      <File FileName="Neo4j.NDP.CSharpDriver/IConnection.cs" Line="9" Column="27" />
+      <File FileName="Neo4j.NDP.CSharpDriver/Connection.cs" Line="77" Column="34" />
+      <File FileName="Neo4j.NDP.CSharpDriver/Serialization/ResultBuilder.cs" Line="70" Column="79" />
+      <File FileName="Neo4j.NDP.CSharpDriver/Serialization/MessageObjectConversionExtensions.cs" Line="22" Column="10" />
+      <File FileName="TestConsole/Program.cs" Line="76" Column="18" />
+      <File FileName="Neo4j.NDP.CSharpDriver/Serialization/MessageObjectDeserializer.cs" Line="1" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
-          <Node name="Neo4j.NDP.CSharpDriver-Xamarin" expanded="True" selected="True">
+          <Node name="Neo4j.NDP.CSharpDriver-Xamarin" expanded="True">
             <Node name="Neo4j.NDP.CSharpDriver" expanded="True">
-              <Node name="Serialization" expanded="True" />
+              <Node name="Serialization" expanded="True">
+                <Node name="MessageObjectDeserializer.cs" selected="True" />
+              </Node>
             </Node>
+            <Node name="TestConsole" expanded="True" />
           </Node>
         </State>
       </Pad>

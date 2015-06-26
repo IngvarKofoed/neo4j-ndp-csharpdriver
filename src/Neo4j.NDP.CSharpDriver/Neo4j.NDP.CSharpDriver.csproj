@@ -48,7 +48,6 @@
     <Compile Include="Neo4jService.cs" />
     <Compile Include="Serialization\BigEndianTargetBitConverter.cs" />
     <Compile Include="Serialization\BitConverterBase.cs" />
-    <Compile Include="ChunkStream.cs" />
     <Compile Include="Serialization\IBitConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Serialization\IMessageBool.cs" />
@@ -95,6 +94,9 @@
     <Compile Include="Serialization\PackStreamPacker.cs" />
     <Compile Include="Serialization\IPackStreamPackerFactory.cs" />
     <Compile Include="Serialization\PackStreamPackerFactory.cs" />
+    <Compile Include="Serialization\ChunkStream.cs" />
+    <Compile Include="Serialization\ResultBuilder.cs" />
+    <Compile Include="Serialization\MessageObjectConversionExtensions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

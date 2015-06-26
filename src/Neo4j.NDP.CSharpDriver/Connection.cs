@@ -35,44 +35,16 @@ namespace Neo4j.NDP.CSharpDriver
             logger.Info("Initialization was successful");
         }
 
+        /*
         public IEnumerable<IEntity> Run(string statement, IDictionary<string, object> parameters = null)
         {
-            logger.Info("Running statement: {0}", statement);
-
-            IMessageMap parametersMessage = BuildParameters(parameters);
-
-            IMessageStructure runRequest = new MessageStructure(
-                StructureSignature.Run, new IMessageObject[] {
-					new MessageText(statement),
-                    parametersMessage 
-		    });
-
-            chunkStream.Write(runRequest);
-
-            IMessageStructure pullAllRequest = new MessageStructure(
-                StructureSignature.PullAll
-            );
-            chunkStream.Write(pullAllRequest);
-
-            IMessageObject runResponse = chunkStream.Read();
-            if (runResponse == null || runResponse.Type != MessageObjectType.Structure)
-            {
-                throw new InvalidOperationException("Unexpected data received: " + runResponse ?? "");
-            }
-
-            IMessageStructure runResponseStructure = runResponse as IMessageStructure;
-            if (runResponseStructure.Signature != StructureSignature.Success)
-            {
-                throw new InvalidOperationException("Run request failed with: " + runResponseStructure.ToString());
-            }
-
-            logger.Info("Statement ran with success");
+            RunStatement(statement, parameters);
 
             IEntityBuilder graphBuilder = new EntityBuilder(); // TODO: Inject this or use factory
             while (true)
             {
                 IMessageObject result = chunkStream.Read();
-                logger.Info("Received message: {0}", result != null ? result.ToString() : "hmm");
+                logger.Info("Received message: {0}", result != null ? result.ToString() : "");
 
                 if (result.IsStructureWithSignature(StructureSignature.Record))
                 {
@@ -100,6 +72,129 @@ namespace Neo4j.NDP.CSharpDriver
             logger.Info("Finished with the run");
            
             yield break;
+        }*/
+
+        public IEnumerable<T> Run<T>(string statement, IDictionary<string, object> parameters = null)
+        {
+            RunStatement(statement, parameters);
+
+            ResultBuilder<T> builder = new ResultBuilder<T>();
+
+            bool hasBeenValidated = false;
+            while (true)
+            {
+                IMessageObject result = chunkStream.Read();
+                logger.Info("Received message: {0}", result != null ? result.ToString() : "");
+
+                if (result.IsStructureWithSignature(StructureSignature.Record))
+                {
+                    IMessageStructure recordMessage = result as IMessageStructure;
+                    
+                    yield return builder.Build(recordMessage.TryGetField<IMessageList>(0));
+                }
+                else if (result.IsStructureWithSignature(StructureSignature.Success)) 
+                {
+                    break;
+                }
+                else if (result.IsStructureWithSignature(StructureSignature.Failure))
+                {
+                    // TODO: Ack failure
+                    break;
+                }
+                else 
+                {
+                    throw new InvalidOperationException(string.Format("Unexpected response: {0}", result));
+                }
+            }
+
+            logger.Info("Finished with the run");
+
+            yield break;
+        }
+
+        // TODO: Move this!!
+
+        private IEnumerable<string> BuildLabels(IMessageList labelMessageList)
+        {
+            foreach (IMessageObject itemObject in labelMessageList.Items)
+            {
+                if (itemObject.Type != MessageObjectType.Text) throw new InvalidOperationException("Unexpected type for node label: " + itemObject.Type);
+
+                IMessageText labelObject = itemObject as IMessageText;
+                yield return labelObject.Text;
+            }
+        }
+
+        private IEnumerable<Tuple<string, object>> BuildProperties(IMessageMap propertiesMessageMap)
+        {
+            foreach (var keyValue in propertiesMessageMap.Map)
+            {
+                string key = GetPropertyKey(keyValue.Key);
+                object value = GetPropertyValue(keyValue.Value);
+
+                yield return new Tuple<string, object>(key, value);
+            }
+        }
+
+        private string GetPropertyKey(IMessageObject propertyValue)
+        {
+            if (propertyValue.Type == MessageObjectType.Text)
+            {
+                return ((MessageText)propertyValue).Text;
+            }
+            else 
+            {
+                throw new InvalidOperationException("Unexpected type for map key: " + propertyValue.Type);
+            }
+        }
+
+        private object GetPropertyValue(IMessageObject propertyValue)
+        {
+            if (propertyValue.Type == MessageObjectType.Text)
+            {
+                return ((MessageText)propertyValue).Text;
+            }
+            else 
+            {
+                throw new InvalidOperationException("Unexpected type for map value: " + propertyValue.Type);
+            }
+        }
+
+        ////////////////////////////////////////////////////////////////////
+
+        private void RunStatement(string statement, IDictionary<string, object> parameters)
+        {
+            logger.Info("Running statement: {0}", statement);
+
+            IMessageMap parametersMessage = BuildParameters(parameters);
+
+            IMessageStructure runRequest = new MessageStructure(
+                StructureSignature.Run, new IMessageObject[] {
+                new MessageText(statement),
+                parametersMessage 
+            });
+            chunkStream.Write(runRequest);
+
+            IMessageStructure pullAllRequest = new MessageStructure(
+                StructureSignature.PullAll
+            );
+            chunkStream.Write(pullAllRequest);
+
+            IMessageObject runResponse = chunkStream.Read();
+            if (runResponse == null || runResponse.Type != MessageObjectType.Structure)
+            {
+                throw new InvalidOperationException("Unexpected data received: " + runResponse ?? "");
+            }
+
+            // TODO: Handle failure
+
+            IMessageStructure runResponseStructure = runResponse as IMessageStructure;
+            if (runResponseStructure.Signature != StructureSignature.Success)
+            {
+                throw new InvalidOperationException("Run request failed with: " + runResponseStructure.ToString());
+            }
+
+            logger.Info("Statement ran with success");
         }
 
         private IMessageMap BuildParameters(IDictionary<string, object> parameters)

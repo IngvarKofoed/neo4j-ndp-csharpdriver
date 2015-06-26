@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace Neo4j.NDP.CSharpDriver
+namespace Neo4j.NDP.CSharpDriver.Serialization
 {
     /// <summary>
     /// A <see cref="ChunkStream"/> is a stream that reads and writes

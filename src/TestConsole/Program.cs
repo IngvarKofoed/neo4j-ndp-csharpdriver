@@ -64,35 +64,27 @@ namespace TestConsole
             Neo4jService neo4jService = new Neo4jService(new ConsoleLogger());
             using (IConnection connection = neo4jService.CreateConnection("localhost", 7687))
             {
-                /*
-                connection.Run("CREATE (a:Person {name:'Martin'})-[ab:KNOWS {from:'Home'}]->(b:Person {name:'Ingvar'})");
-                connection.Run("CREATE (a:Person {name:'Martin'})-[ab:KNOWS {from:'Home'}]->(b:Person {name:'Kofoed'})");
-                connection.Run("CREATE (a:Person {name:'Kofoed'})-[ab:KNOWS {from:'Home'}]->(b:Person {name:'Jensen'})");
-                connection.Run("CREATE (a:Person {name:'Jensen'})-[ab:KNOWS {from:'Home'}]->(b:Person {name:'Martin'})");
-               */
+                //connection.Run("CREATE (a:Person {name:'Martin'})-[ab:KNOWS {from:'Home'}]->(b:Person {name:'Ingvar'})").ToList();
+                //connection.Run("CREATE (a:Person {name:'Martin'})-[ab:KNOWS {from:'Home'}]->(b:Person {name:'Kofoed'})").ToList();
+                //connection.Run("CREATE (a:Person {name:'Kofoed'})-[ab:KNOWS {from:'Home'}]->(b:Person {name:'Jensen'})").ToList();
+                //connection.Run("CREATE (a:Person {name:'Jensen'})-[ab:KNOWS {from:'Home'}]->(b:Person {name:'Martin'})").ToList(); 
 
-                IEnumerable<IEntity> entities = connection.Run("MATCH (n)-[r]->(c) RETURN n, r");
- 
-                Console.WriteLine("Received entities: ");
-                foreach (IEntity entity in entities)
+                //IEnumerable<IEntity> entities = connection.Run("MATCH (n)-[r]->(c) RETURN n, r");
+
+
+                var records = connection.Run<Tuple<INode, string>>("MATCH (n) RETURN n, n.name").ToList();
+                 
+                Console.WriteLine("Results: ");
+                foreach (var record in records)
                 {
-                    if (entity.EntityType == EntityType.Node)
-                    {
-                        INode node = entity as INode;
-                        Console.WriteLine(node); 
-                    }
-                    else if (entity.EntityType == EntityType.Relationship)
-                    {
-                        IRelationship relationship = entity as IRelationship;
-                        Console.WriteLine(relationship); 
-                    }
+                    Console.WriteLine("n = {0}, n.name = {1}", record.Item1, record.Item2);
                 }
             }
 
             Console.WriteLine("All done!");
         }
 
-
+        /*
 
         public static void Main_Old(string[] args)
         {
@@ -130,11 +122,11 @@ namespace TestConsole
             }
 
             Console.WriteLine("All done!");
-        }
+        }*/
     }
 
     /*
-     * 
+     * The map result on success?
      * 
      */
 }

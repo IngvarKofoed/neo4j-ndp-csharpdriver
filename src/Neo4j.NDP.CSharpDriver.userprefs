@@ -1,17 +1,6 @@
 ﻿<Properties StartupItem="Neo4j.NDP.CSharpDriver/Neo4j.NDP.CSharpDriver.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench>
-    <Pads>
-      <Pad Id="ProjectPad">
-        <State name="__root__">
-          <Node name="Neo4j.NDP.CSharpDriver" expanded="True" selected="True">
-            <Node name="Neo4j.NDP.CSharpDriver" expanded="True" />
-            <Node name="Neo4j.NDP.CSharpDriver.Test" expanded="True" />
-          </Node>
-        </State>
-      </Pad>
-    </Pads>
-  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workbench />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
