@@ -13,8 +13,6 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
         /// <param name="text">The bool value of the message bool object.</param>
         public MessageBool(bool value)
         {
-            if (value == null) throw new ArgumentNullException("value");
-
             this.Value = value;
         }
 

@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Neo4j.NDP.CSharpDriver.Serialization
 {
@@ -84,6 +81,18 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
         }
 
         /// <summary>
+        /// Converts an int (double) to bytes.
+        /// </summary>
+        /// <param name="value">The int (double) value to convert.</param>
+        /// <returns>The specified int (double) value as an array of bytes.</returns>
+        public byte[] GetBytes(double value)
+        {
+            byte[] bytes = BitConverter.GetBytes(value);
+
+            return ToTargetEndian(bytes);
+        }
+
+        /// <summary>
         /// Converts an string to bytes.
         /// </summary>
         /// <param name="value">The string value to convert.</param>
@@ -124,6 +133,17 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
         {
             bytes = ToPlatformEndian(bytes);
             return BitConverter.ToInt64(bytes, 0);
+        }
+
+        /// <summary>
+        /// Converts an byte array to a int (double).
+        /// </summary>
+        /// <param name="bytes">The byte array to convert.</param>
+        /// <returns>A int (double) converted from the byte array.</returns>
+        public double ToDouble(byte[] bytes)
+        {
+            bytes = ToPlatformEndian(bytes);
+            return BitConverter.ToDouble(bytes, 0);
         }
 
         /// <summary>

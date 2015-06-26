@@ -5,13 +5,13 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
     /// <summary>
     /// Represents an int value in a PackStream message.
     /// </summary>
-    public class MessageInt : IMessageInt
+    public class MessageDouble : IMessageDouble
     {
         /// <summary>
-        /// Instantiates a <see cref="MessageInt"/> with the int value of <paramref name="value"/>.
+        /// Instantiates a <see cref="MessageInt"/> with the double value of <paramref name="value"/>.
         /// </summary>
-        /// <param name="text">The int value of the message int object.</param>
-        public MessageInt(Int64 value)
+        /// <param name="text">The double value of the message double object.</param>
+        public MessageDouble(double value)
         {
             this.Value = value;
         }
@@ -19,12 +19,12 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
         /// <summary>
         /// This has the type <see cref="MessageObjectType.Text"/>
         /// </summary>
-        public MessageObjectType Type { get { return MessageObjectType.Int; } }
+        public MessageObjectType Type { get { return MessageObjectType.Double; } }
 
         /// <summary>
         /// The bool  value of this bool message object.  
         /// </summary>
-        public Int64 Value { get; private set; }
+        public double Value { get; private set; }
 
         public override string ToString()
         {

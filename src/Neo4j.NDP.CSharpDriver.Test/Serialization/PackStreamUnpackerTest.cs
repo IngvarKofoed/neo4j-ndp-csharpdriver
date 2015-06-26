@@ -96,6 +96,51 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
         }
 
         [TestMethod]
+        public void DoubleResultTest()
+        {
+            // Initialize
+            byte[] streamBytes = new byte[] { 0xC1 };
+            Mock<IBitConverter> bitConverter = new Mock<IBitConverter>();
+            IPackStreamUnpacker unpacker = new PackStreamUnpacker(bitConverter.Object);
+
+            // Run
+            PackStreamUnpackerResult result = GetResult(s => unpacker.ReadNextType(s), streamBytes);
+
+            // Validate
+            ValidateHasNoValues(result);
+            Assert.AreEqual(PackStreamType.Double, result.Type);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void ReadDoubleNullTest()
+        {
+            // Initialize
+            Mock<IBitConverter> bitConverter = new Mock<IBitConverter>();
+            IPackStreamUnpacker unpacker = new PackStreamUnpacker(bitConverter.Object);
+
+            // Run
+            unpacker.ReadDouble(null);
+        }
+
+        [TestMethod]
+        public void ReadDoubleTest()
+        {
+            // Initialize
+            const double testValue = 1.1;
+            byte[] streamBytes = new byte[8];
+            Mock<IBitConverter> bitConverter = new Mock<IBitConverter>();
+            bitConverter.Setup(f => f.ToDouble(streamBytes)).Returns(testValue);
+            IPackStreamUnpacker unpacker = new PackStreamUnpacker(bitConverter.Object);
+
+            // Run
+            double result = GetResult(s => unpacker.ReadDouble(s), streamBytes);
+
+            // Validate
+            Assert.AreEqual(testValue, result);
+        }
+
+        [TestMethod]
         public void Int4NegativeResultTest()
         {
             // Initialize
@@ -596,6 +641,18 @@ namespace Neo4j.NDP.CSharpDriver.Test.Serialization
             ValidateHasIntValues(result);
             Assert.AreEqual(PackStreamType.Structure, result.Type);
             Assert.AreEqual(300, result.IntValue);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void ReadStructureSignatureNullTest()
+        {
+            // Initialize
+            Mock<IBitConverter> bitConverter = new Mock<IBitConverter>();
+            IPackStreamUnpacker unpacker = new PackStreamUnpacker(bitConverter.Object);
+
+            // Run
+            unpacker.ReadStructureSignature(null);
         }
 
         [TestMethod]

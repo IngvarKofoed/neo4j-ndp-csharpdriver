@@ -51,6 +51,13 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
         byte[] GetBytes(Int64 value);
 
         /// <summary>
+        /// Converts an int (double) to bytes.
+        /// </summary>
+        /// <param name="value">The int (double) value to convert.</param>
+        /// <returns>The specified int (double) value as an array of bytes.</returns>
+        byte[] GetBytes(double value);
+
+        /// <summary>
         /// Converts an string to bytes.
         /// </summary>
         /// <param name="value">The string value to convert.</param>
@@ -77,6 +84,13 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
         /// <param name="bytes">The byte array to convert.</param>
         /// <returns>A int (Int64) converted from the byte array.</returns>
         Int64 ToInt64(byte[] bytes);
+
+        /// <summary>
+        /// Converts an byte array to a int (double).
+        /// </summary>
+        /// <param name="bytes">The byte array to convert.</param>
+        /// <returns>A int (double) converted from the byte array.</returns>
+        double ToDouble(byte[] bytes);
 
         /// <summary>
         /// Converts an byte array of a UTF8 encoded string to a string

@@ -43,6 +43,10 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
                     Serialize((IMessageBool)messageObject, builder);
                     break;
 
+                case MessageObjectType.Double:
+                    Serialize((IMessageDouble)messageObject, builder);
+                    break;
+
                 case MessageObjectType.Int:
                     Serialize((IMessageInt)messageObject, builder);
                     break;
@@ -76,6 +80,11 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
         private void Serialize(IMessageBool messageBool, IPackStreamPacker builder)
         {
             builder.Append(messageBool.Value);
+        }
+
+        private void Serialize(IMessageDouble messageDouble, IPackStreamPacker builder)
+        {
+            builder.Append(messageDouble.Value);
         }
 
         private void Serialize(IMessageInt messageInt, IPackStreamPacker builder)

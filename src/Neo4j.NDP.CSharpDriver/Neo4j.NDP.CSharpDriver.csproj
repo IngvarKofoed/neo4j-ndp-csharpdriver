@@ -51,6 +51,7 @@
     <Compile Include="Serialization\IBitConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Serialization\IMessageBool.cs" />
+    <Compile Include="Serialization\IMessageDouble.cs" />
     <Compile Include="Serialization\IMessageInt.cs" />
     <Compile Include="Serialization\IMessageList.cs" />
     <Compile Include="Serialization\IMessageMap.cs" />
@@ -60,6 +61,7 @@
     <Compile Include="Serialization\IMessageObjectSerializer.cs" />
     <Compile Include="Serialization\IMessageStructure.cs" />
     <Compile Include="Serialization\LittleEndianTargetBitConverter.cs" />
+    <Compile Include="Serialization\MessageDouble.cs" />
     <Compile Include="Serialization\MessageInt.cs" />
     <Compile Include="Serialization\MessageBool.cs" />
     <Compile Include="Serialization\MessageList.cs" />

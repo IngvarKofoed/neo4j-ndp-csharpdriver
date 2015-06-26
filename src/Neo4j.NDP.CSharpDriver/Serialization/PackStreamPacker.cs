@@ -50,6 +50,16 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
         /// Appends the given <paramref name="value"/> value to the result byte array.
         /// </summary>
         /// <param name="value">The int value to append.</param>
+        public void Append(double value)
+        {
+            bytes.Add(PackStreamConstants.FloatMarker);
+            bytes.AddRange(bitConverter.GetBytes(value));
+        }
+
+        /// <summary>
+        /// Appends the given <paramref name="value"/> value to the result byte array.
+        /// </summary>
+        /// <param name="value">The int value to append.</param>
         public void Append(Int64 value)
         {
             if (PackStreamConstants.Int4Min <= value && value <= PackStreamConstants.Int4Max)
