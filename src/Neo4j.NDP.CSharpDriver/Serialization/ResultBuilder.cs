@@ -5,15 +5,27 @@ using System.Collections.Generic;
 
 namespace Neo4j.NDP.CSharpDriver.Serialization
 {
-    public class ResultBuilder<T>
+    /// <summary>
+    /// Builds results of type <typeparamref name="T" /> from records items in the form of <see cref="IMessageList"/>
+    /// </summary>
+    public class ResultBuilder<T> : IResultBuilder<T>
     {
         private bool hasBeenInitialized = false;
         private Func<object[], object> resultFactory = null;
         private Func<IMessageObject, object>[] casters = null;
 
- 
+        /// <summary>
+        /// Builds results of type <typeparamref name="T" /> from records items in the form of <see cref="IMessageList"/>
+        /// </summary>
+        /// <param name="recordItems">Record items to build the result of.</param>
+        /// <typeparam name="T">
+        /// The type to construct through its constructor with the values
+        /// of <paramref name="recordItems"/> as arguments to the constructor.
+        /// </typeparam>
         public T Build(IMessageList recordItems)
         {
+            if (recordItems == null) throw new ArgumentNullException("recordItems");
+
             if (!hasBeenInitialized)
             {
                 Initialize(recordItems);
@@ -46,7 +58,7 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
 
             int length = arguments.Length;
 
-            Func<IMessageObject, object>[] localCasters = new Func<IMessageObject, object>[length];
+            casters = new Func<IMessageObject, object>[length];
 
             for (int i = 0; i < length; i++)
             {
@@ -54,10 +66,8 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
 
                 if (caster == null) throw new InvalidOperationException(string.Format("Argument of type {0} does not match record item with type {1}", arguments[i].FullName, recordItems.Items[i].Type));
             
-                localCasters[i] = caster;
+                casters[i] = caster;
             }
-
-            this.casters = localCasters; // Avoid half results
         }
 
 
@@ -66,6 +76,18 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
             if (type == typeof(bool) && messageObject is IMessageBool) 
             {
                 return mo => MessageObjectConversionExtensions.ToBool(mo);
+            }
+            else if (type == typeof(double) && messageObject is IMessageDouble) 
+            {
+                return mo => MessageObjectConversionExtensions.ToDouble(mo);
+            }
+            else if (type == typeof(Int64) && messageObject is IMessageInt) 
+            {
+                return mo => MessageObjectConversionExtensions.ToInt(mo);
+            }
+            else if (type == typeof(int) && messageObject is IMessageInt) 
+            {
+                return mo => (int)MessageObjectConversionExtensions.ToInt(mo);
             }
             else if (type == typeof(string) && messageObject is IMessageText) 
             {
@@ -76,6 +98,11 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
             {
                 return mo => MessageObjectConversionExtensions.ToNode(mo);
             }
+            else if (type == typeof(IRelationship) && messageObject is IMessageStructure && 
+                (messageObject as IMessageStructure).Signature == StructureSignature.Relationship)
+            {
+                return mo => MessageObjectConversionExtensions.ToRelationship(mo);
+            }
             else 
             {
                 return null;
@@ -85,10 +112,40 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
 
         private Type[] GetArgumentsAndResultFactory()
         {
-            if (IsTuple(typeof(T)))
+            if (typeof(T) == typeof(bool))
             {
-                resultFactory = parms => Activator.CreateInstance(typeof(T), parms);
-                return typeof(T).GetGenericArguments();
+                resultFactory = parms => (bool)parms[0];
+                return new Type[] { typeof(bool) };
+            }
+            else if (typeof(T) == typeof(double))
+            {
+                resultFactory = parms => (double)parms[0];
+                return new Type[] { typeof(double) };
+            }
+            else if (typeof(T) == typeof(int))
+            {
+                resultFactory = parms => (int)parms[0];
+                return new Type[] { typeof(int) };
+            }
+            else if (typeof(T) == typeof(Int64))
+            {
+                resultFactory = parms => (Int64)parms[0];
+                return new Type[] { typeof(Int64) };
+            }
+            else if (typeof(T) == typeof(string))
+            {
+                resultFactory = parms => (string)parms[0];
+                return new Type[] { typeof(string) };
+            }
+            else if (typeof(T) == typeof(INode))
+            {
+                resultFactory = parms => (INode)parms[0];
+                return new Type[] { typeof(INode) };
+            }
+            else if (typeof(T) == typeof(IRelationship))
+            {
+                resultFactory = parms => (IRelationship)parms[0];
+                return new Type[] { typeof(IRelationship) };
             }
             else 
             {
@@ -104,22 +161,6 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
                 resultFactory = parms => constructor.Invoke(parms);
                 return constructor.GetParameters().Select(f => f.ParameterType).ToArray();
             }
-        }
-
-        private static bool IsTuple(Type type)
-        {
-            if (!type.IsGenericType) return false;
-
-            Type genericType = type.GetGenericTypeDefinition();
-            if (type == typeof(Tuple<,>)) return true;
-            if (type == typeof(Tuple<,,>)) return true;
-            if (type == typeof(Tuple<,,,>)) return true;
-            if (type == typeof(Tuple<,,,,>)) return true;
-            if (type == typeof(Tuple<,,,,,>)) return true;
-            if (type == typeof(Tuple<,,,,,,>)) return true;
-            if (type == typeof(Tuple<,,,,,,,>)) return true;
-
-            return false;
         }
     }
 }

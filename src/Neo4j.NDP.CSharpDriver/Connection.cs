@@ -35,45 +35,6 @@ namespace Neo4j.NDP.CSharpDriver
             logger.Info("Initialization was successful");
         }
 
-        /*
-        public IEnumerable<IEntity> Run(string statement, IDictionary<string, object> parameters = null)
-        {
-            RunStatement(statement, parameters);
-
-            IEntityBuilder graphBuilder = new EntityBuilder(); // TODO: Inject this or use factory
-            while (true)
-            {
-                IMessageObject result = chunkStream.Read();
-                logger.Info("Received message: {0}", result != null ? result.ToString() : "");
-
-                if (result.IsStructureWithSignature(StructureSignature.Record))
-                {
-                    IEnumerable<IEntity> entities = graphBuilder.BuildFromRecord((IMessageStructure)result);
-                    foreach (IEntity entity in entities)
-                    {
-                        yield return entity;
-                    }
-                }
-                else if (result.IsStructureWithSignature(StructureSignature.Success)) 
-                {
-                    break;
-                }
-                else if (result.IsStructureWithSignature(StructureSignature.Failure))
-                {
-                    // TODO: Ack failure
-                    break;
-                }
-                else 
-                {
-                    throw new InvalidOperationException(string.Format("Unexpected response: {0}", result));
-                }
-            }
-
-            logger.Info("Finished with the run");
-           
-            yield break;
-        }*/
-
         public IEnumerable<T> Run<T>(string statement, IDictionary<string, object> parameters = null)
         {
             RunStatement(statement, parameters);
@@ -111,56 +72,6 @@ namespace Neo4j.NDP.CSharpDriver
 
             yield break;
         }
-
-        // TODO: Move this!!
-
-        private IEnumerable<string> BuildLabels(IMessageList labelMessageList)
-        {
-            foreach (IMessageObject itemObject in labelMessageList.Items)
-            {
-                if (itemObject.Type != MessageObjectType.Text) throw new InvalidOperationException("Unexpected type for node label: " + itemObject.Type);
-
-                IMessageText labelObject = itemObject as IMessageText;
-                yield return labelObject.Text;
-            }
-        }
-
-        private IEnumerable<Tuple<string, object>> BuildProperties(IMessageMap propertiesMessageMap)
-        {
-            foreach (var keyValue in propertiesMessageMap.Map)
-            {
-                string key = GetPropertyKey(keyValue.Key);
-                object value = GetPropertyValue(keyValue.Value);
-
-                yield return new Tuple<string, object>(key, value);
-            }
-        }
-
-        private string GetPropertyKey(IMessageObject propertyValue)
-        {
-            if (propertyValue.Type == MessageObjectType.Text)
-            {
-                return ((MessageText)propertyValue).Text;
-            }
-            else 
-            {
-                throw new InvalidOperationException("Unexpected type for map key: " + propertyValue.Type);
-            }
-        }
-
-        private object GetPropertyValue(IMessageObject propertyValue)
-        {
-            if (propertyValue.Type == MessageObjectType.Text)
-            {
-                return ((MessageText)propertyValue).Text;
-            }
-            else 
-            {
-                throw new InvalidOperationException("Unexpected type for map value: " + propertyValue.Type);
-            }
-        }
-
-        ////////////////////////////////////////////////////////////////////
 
         private void RunStatement(string statement, IDictionary<string, object> parameters)
         {

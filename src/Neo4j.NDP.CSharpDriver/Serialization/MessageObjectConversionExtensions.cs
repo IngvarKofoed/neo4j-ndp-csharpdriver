@@ -11,24 +11,35 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
     {
         public static bool ToBool(this IMessageObject messageObject)
         {
+            if (messageObject == null) throw new ArgumentNullException("messageObject");
             if (messageObject.Type != MessageObjectType.Bool) throw new ArgumentException("Expected type: IMessageBool", "messageObject");
             return (messageObject as IMessageBool).Value;
         }
 
-        public static Int64 ToInt(this IMessageInt messageObject)
+        public static double ToDouble(this IMessageObject messageObject)
         {
+            if (messageObject == null) throw new ArgumentNullException("messageObject");
+            if (messageObject.Type != MessageObjectType.Double) throw new ArgumentException("Expected type: IMessageBool", "messageObject");
+            return (messageObject as IMessageDouble).Value;
+        }
+
+        public static Int64 ToInt(this IMessageObject messageObject)
+        {
+            if (messageObject == null) throw new ArgumentNullException("messageObject");
             if (messageObject.Type != MessageObjectType.Int) throw new ArgumentException("Expected type: IMessageBool", "messageObject");
             return (messageObject as IMessageInt).Value;
         }
 
         public static string ToString(this IMessageObject messageObject)
         {
+            if (messageObject == null) throw new ArgumentNullException("messageObject");
             if (messageObject.Type != MessageObjectType.Text) throw new ArgumentException("Expected type: IMessageBool", "messageObject");
             return (messageObject as IMessageText).Text;
         }
 
         public static INode ToNode(this IMessageObject messageObject)
         {
+            if (messageObject == null) throw new ArgumentNullException("messageObject");
             IMessageStructure messageStructure = messageObject as IMessageStructure;
             if (messageStructure == null || messageStructure.Signature != StructureSignature.Node) throw new ArgumentException("Expected type: IMessageStructure with signature: " + StructureSignature.Node, "messageObject");
 
@@ -42,8 +53,26 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
             return new Node(id, labels, properties);
         }
 
+        public static IRelationship ToRelationship(this IMessageObject messageObject)
+        {
+            if (messageObject == null) throw new ArgumentNullException("messageObject");
+            IMessageStructure messageStructure = messageObject as IMessageStructure;
+            if (messageStructure == null || messageStructure.Signature != StructureSignature.Relationship) throw new ArgumentException("Expected type: IMessageStructure with signature: " + StructureSignature.Relationship, "messageObject");
+
+            string id = messageStructure.TryGetField<IMessageText>(0).Text;
+            string startNode = messageStructure.TryGetField<IMessageText>(1).Text;
+            string endNode = messageStructure.TryGetField<IMessageText>(2).Text;
+            string type = messageStructure.TryGetField<IMessageText>(3).Text;
+            IMessageMap propertiesMessageMap = messageStructure.TryGetField<IMessageMap>(4);
+
+            var properties = propertiesMessageMap.ToEntityProperties();
+
+            return new Relationship(id, startNode, endNode, type, properties);
+        }
+
         public static IEnumerable<string> ToNodeLabels(this IMessageObject messageObject)
         {
+            if (messageObject == null) throw new ArgumentNullException("messageObject");
             if (messageObject.Type != MessageObjectType.List) throw new ArgumentException("Expected type: IMessageList", "messageObject");
             IMessageList messageList = (IMessageList)messageObject;
 
@@ -63,6 +92,7 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
 
         public static IEnumerable<Tuple<string, object>> ToEntityProperties(this IMessageMap messageObject)
         {
+            if (messageObject == null) throw new ArgumentNullException("messageObject");
             if (messageObject.Type != MessageObjectType.Map) throw new ArgumentException("Expected type: IMessageList", "messageObject");
 
             IMessageMap messageMap = (IMessageMap)messageObject;
@@ -89,18 +119,21 @@ namespace Neo4j.NDP.CSharpDriver.Serialization
 
         private static object GetPropertyValue(IMessageObject propertyValue)
         {
-            if (propertyValue.Type == MessageObjectType.Text)
-            {
-                return (propertyValue as MessageText).Text;
-            }
-            else if (propertyValue.Type == MessageObjectType.Bool)
+            if (propertyValue.Type == MessageObjectType.Bool)
             {
                 return (propertyValue as IMessageBool).Value;
             }
-            // TODO: Add floats
+            else if (propertyValue.Type == MessageObjectType.Double)
+            {
+                return (propertyValue as IMessageDouble).Value;
+            }
             else if (propertyValue.Type == MessageObjectType.Int)
             {
                 return (propertyValue as IMessageInt).Value;
+            }
+            else if (propertyValue.Type == MessageObjectType.Text)
+            {
+                return (propertyValue as MessageText).Text;
             }
             else 
             {
