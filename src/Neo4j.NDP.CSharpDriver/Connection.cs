@@ -35,13 +35,39 @@ namespace Neo4j.NDP.CSharpDriver
             logger.Info("Initialization was successful");
         }
 
+        public void Run(string statement, IDictionary<string, object> parameters = null)
+        {
+            RunStatement(statement, parameters);
+
+            while (true)
+            {
+                IMessageObject result = chunkStream.Read();
+                logger.Info("Received message: {0}", result != null ? result.ToString() : "");
+
+                if (result.IsStructureWithSignature(StructureSignature.Success)) 
+                {
+                    break;
+                }
+                else if (result.IsStructureWithSignature(StructureSignature.Failure))
+                {
+                    // TODO: Ack failure
+                    break;
+                }
+                else 
+                {
+                    throw new InvalidOperationException(string.Format("Unexpected response: {0}", result));
+                }
+            }
+
+            logger.Info("Finished with the run");
+        }
+
         public IEnumerable<T> Run<T>(string statement, IDictionary<string, object> parameters = null)
         {
             RunStatement(statement, parameters);
 
             ResultBuilder<T> builder = new ResultBuilder<T>();
 
-            bool hasBeenValidated = false;
             while (true)
             {
                 IMessageObject result = chunkStream.Read();
